@@ -1,4 +1,4 @@
-# Earth Trend Detective
+# EcoSphere-4D
 
 **My entry for the NASA Space Apps Challenge.**
 
