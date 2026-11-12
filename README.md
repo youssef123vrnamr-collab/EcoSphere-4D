@@ -1,60 +1,75 @@
-# EcoSphere-4D
+# ECOSPHERE-4D
 
-**My entry for the NASA Space Apps Challenge.**
+**My entry for the NASA Space Apps Challenge, "Be An Earth System Trend Detective!"**
 
-Hi, I'm **Youssef Amr**. I designed, coded and tested this project entirely by myself, as a solo participant.
+Hi, I'm **Youssef Amr**, and this is my project. I entered as a solo participant.
 
-Earth Trend Detective is an interactive 3D Earth that mixes real NASA and weather data with a climate projection model, so you can see what the planet is doing right now and where current trends may lead.
+ECOSPHERE-4D is a 3D Earth you can spin, zoom into and question. It puts real NASA and weather data next to a climate projection model, so you can see what the planet is doing right now and where the trends could take it. You can start with the whole planet and keep zooming until you are looking at a street, without ever leaving the globe.
 
----
-
-## Why I built it
-
-Climate data is usually spread across charts, tables and separate websites. I wanted one place where anyone can spin the globe, pick a location, and see real observations next to future projections. I also wanted storms, winds, clouds and ocean currents to behave as the data says they should, instead of being drawn by hand.
+I used AI tools (Claude) as a coding assistant while building it. The idea, the choices about what to show and the direction of the project are mine.
 
 ---
 
-## What it does
+## Why I made it
 
-**Real data (observed)**
-- **NASA GIBS** satellite layers: VIIRS true color, land surface temperature, vegetation index (NDVI) and sea surface temperature, with deep-zoom tiles when you zoom in.
-- **NASA POWER** temperature history (1990 to last year) for any location you pick, with a trend in °C per decade.
-- **NASA EONET** active storms and wildfires, marked on the globe. Storm tracks are drawn, and the reported wind speed is used when available.
-- **Open-Meteo** live data: wind at 850, 700 and 200 hPa, humidity, cloud cover, sea surface temperature and ocean currents. Wind comes from the hourly forecast for the next 72 hours, and the simulation clock starts at the real UTC time.
-- Real-time **day/night terminator** that follows the Sun.
-
-**Storm simulation**
-- No storm location is written in the code. A storm can only form where the live data allows it: warm ocean (26.5 °C or more), cyclonic low-level spin, low wind shear, moist mid-levels, enough distance from the equator, and a bias from where storms formed in the past (NASA EONET archive).
-- New storms start weak and spin up gradually. Steering and weakening come from the live wind and shear.
-- Storm shape is not a fixed drawing. Each air parcel is carried by the real wind plus the storm's own vortex.
-- Storms feed back on the planet: they thicken the cloud layer around them, cool the sea surface beneath them (a cold wake that recovers slowly), and push ocean currents with their winds.
-
-**Projections (illustrative)**
-- Three emissions scenarios: SSP1-2.6, SSP2-4.5 and SSP5-8.5, up to the year 2100.
-- Warming, Arctic ice loss, sea level rise, CO₂ and vegetation change are shown on the globe.
-- The model is a simple illustrative one tuned to IPCC AR6 trends. It is **not** an official forecast.
-
-**Command center**
-- A built-in terminal for quick control and a short written analysis. An optional AI key (Claude or OpenAI) can be pasted into the code for richer interpretations. Without a key, a built-in analyst answers.
+Climate data is usually scattered across charts, tables and different websites. I wanted one place where anyone can pick a spot on Earth and see what has already happened there, what is happening now, and what could happen next. I also wanted storms, winds, clouds and ocean currents to move the way the data says they should, not the way someone drew them.
 
 ---
 
-## How to run it
+## What you can do with it
 
-The whole project is a single HTML file.
+**Zoom from space to street level**
+Zooming never kicks you out to a flat map. Real satellite photos are draped on the 3D globe and load in as you get closer, down to about 640 m above the ground. Zoom back out and you are looking at the whole planet again. Tap anywhere to lock that spot, and its elevation, projected sea level and air quality show up in a card under the simulation controls.
 
-1. Download `earth-trend-detective.html`.
-2. Open it in a modern browser (Chrome, Edge, Firefox or Safari) with an internet connection.
+**Time machine**
+Pick a year from 2000 to today and see NASA satellite images of the same place back then. Turn on before/after and drag the line across the screen to compare that year with today. Shrinking lakes, retreating ice and growing cities are easy to spot.
 
-No installation or build step is needed.
+**Flood what-if**
+The map colours the land that sits between today's sea level and the sea level rise projected for the scenario and year you chose. There is also a slider that adds extra metres, so you can ask "what if it were 3 m higher?" for a coastline you care about.
 
-### Controls
-- Drag to rotate, scroll or pinch to zoom, click the globe to lock a location.
-- Type a place in **Target region** (for example `Cairo`) to see its live weather and NASA temperature trend.
+**3D relief**
+Hill shading shows mountains and valleys. A relief slider exaggerates the heights, and a tilt slider tips the camera so you see the terrain from the side.
+
+**Share and report**
+One button copies a link that reopens exactly what I am looking at (place, zoom, year, scenario). Another downloads a short report of the spot with its numbers and sources. The project is on GitHub and deployed with Vercel.
+
+**Data trust**
+A table lists every layer, where it comes from, how sharp it is and what it can and cannot tell you. I wanted anyone to be able to check my numbers.
+
+---
+
+## The real data
+
+- **NASA GIBS** satellite layers: true colour, land surface temperature, vegetation (NDVI) and sea surface temperature. GIBS MODIS images also power the time machine.
+- **NASA POWER** temperature history from 1990 for any place you pick, with the trend per decade.
+- **NASA EONET** active storms and wildfires, marked on the globe, with storm tracks and reported wind speed.
+- **Open-Meteo** live wind at three heights, humidity, clouds, sea surface temperature and ocean currents. The simulation clock starts at the real UTC time.
+- **Esri World Imagery** for the sharp satellite photos at deep zoom.
+- **Terrarium elevation tiles** (AWS Open Data) for relief and the flood layer.
+- A live day/night line that follows the Sun.
+
+## The storm simulation
+
+I did not place any storm by hand. A storm can only form where the live data allows it: warm ocean (26.5 °C or more), cyclonic spin in the low levels, low wind shear, moist air higher up, enough distance from the equator, plus a nudge from where storms formed in the past (NASA EONET archive). New storms start weak and spin up slowly. Each parcel of air is carried by the real wind plus the storm's own vortex, so the shape comes from the physics and not from a fixed drawing. Storms also push back on the planet: they thicken the clouds around them, leave a cold wake in the sea and shove the ocean currents with their winds.
+
+## Projections
+
+There are three emissions scenarios, SSP1-2.6, SSP2-4.5 and SSP5-8.5, up to 2100. Warming, Arctic ice loss, sea level, CO₂ and vegetation change all show on the globe. This is a simple model tuned to IPCC AR6 trends. It is meant for exploring and is not an official forecast.
+
+## Command center
+
+There is a small terminal for quick control and a short written analysis. You can paste an optional AI key (Claude or OpenAI) into the code for richer answers. Without a key, a built-in analyst replies.
+
+---
+
+## Using it
+
+It is a single HTML file, so there is nothing to install. Use a modern browser with an internet connection.
+
+- Drag to rotate, scroll or pinch to zoom, click or tap the globe to lock a spot.
+- Type a place in **Target region** (for example `Cairo`) for its live weather and NASA temperature trend.
 - Use the **Globe layer**, **Emissions scenario** and **Projection year** controls, or press **Play timeline**.
-- Use the speed, wind, currents and cyclone buttons to control the simulation.
-
-### Terminal commands
+- The **Explore** card has the time machine, flood what-if, relief, tilt, share link, report and data trust.
 
 | Command | What it does |
 |---|---|
@@ -70,26 +85,24 @@ No installation or build step is needed.
 
 ---
 
+## Limits
+
+I would rather be upfront about these.
+
+- Live wind comes on a coarse 15° grid and covers a 72-hour forecast. After that the last wind field is held steady.
+- The storm simulation is for exploring and is not a weather forecast. Please do not use it for safety decisions.
+- Future climate values are illustrative and tuned to IPCC AR6 trends.
+- Esri photos are not live and can be years old. The time machine shows one MODIS image per year at 250 m, so clouds and gaps happen.
+- Elevation data is off by several metres in places, more in cities and forests. The relief is exaggerated on purpose.
+- The flood layer is a simple bathtub model. It ignores tides, storm surge, sea defences and drainage, and it does not check whether water can actually reach a spot. It also only shows land above today's sea level. Treat anything under 1 to 2 m as a rough hint.
+- If a data source is down, the terminal tells you, and the globe falls back to its normal textures.
+
+---
+
 ## Built with
 
-- HTML, CSS and JavaScript (no framework)
-- [Three.js](https://threejs.org/) for the 3D globe and custom shaders
-- NASA GIBS, NASA POWER and NASA EONET
-- Open-Meteo (forecast, marine and geocoding APIs)
+HTML, CSS and JavaScript with no framework, [Three.js](https://threejs.org/) for the globe and custom shaders, NASA GIBS, POWER and EONET, Open-Meteo, Esri World Imagery and Terrarium elevation tiles.
 
----
-
-## Limitations
-
-- Live wind comes on a coarse global grid (15°) and covers a 72-hour forecast. After that, the last wind field is held steady.
-- The storm simulation is a physics-inspired model for exploration. It is not a weather forecast and should not be used for safety decisions.
-- Future climate values are illustrative and tuned to IPCC AR6 trends.
-- Some data sources may be temporarily unavailable. The app shows a message in the terminal when that happens.
-
----
-
-## Credits
-
-Data and imagery: NASA (GIBS, POWER, EONET) and Open-Meteo. Climate trends referenced from IPCC AR6.
+Climate trends referenced from IPCC AR6.
 
 Created by **Youssef Amr** for the NASA Space Apps Challenge.
