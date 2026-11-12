@@ -83,6 +83,19 @@ It is a single HTML file, so there is nothing to install. Use a modern browser w
 | `ask <question>` | Ask the AI engine |
 | `clear` | Clear the terminal |
 
+### Install it like an app
+
+On a phone you can add ECOSPHERE-4D to your home screen from the browser menu. It opens full screen with its own icon, without the browser bar.
+
+### What is in the project
+
+| File | What it is |
+|---|---|
+| `index.html` | The whole app: globe, simulation, terminal and styles |
+| `manifest.webmanifest` | App name, colours and icons for the home-screen install |
+| `icons/` | The ECOSPHERE-4D logo as app icons |
+| `README.md` | This file |
+
 ---
 
 ## Limits

@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>EcoSphere-4D | NASA Space Apps 2026</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#031428">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ECOSPHERE-4D">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20viewBox%3D%220%200%20200%20200%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20aria-hidden%3D%22true%22%20%3E%3Cdefs%3E%3CradialGradient%20id%3D%22gf%22%20cx%3D%2238%25%22%20cy%3D%2232%25%22%20r%3D%2275%25%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%237defff%22%2F%3E%3Cstop%20offset%3D%22.45%22%20stop-color%3D%22%231a8fe0%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%2306285a%22%2F%3E%3C%2FradialGradient%3E%3ClinearGradient%20id%3D%22rf%22%20x1%3D%220%22%20x2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ffd24d%22%2F%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%2318c8ff%22%2F%3E%3C%2FlinearGradient%3E%3CclipPath%20id%3D%22cf%22%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%22100%22%20r%3D%2260%22%2F%3E%3C%2FclipPath%3E%3C%2Fdefs%3E%3Cg%20transform%3D%22rotate%28-24%20100%20100%29%22%3E%3Cpath%20class%3D%22orb%22%20d%3D%22M8%20100A92%2030%200%200%201%20192%20100%22%20fill%3D%22none%22%20stroke%3D%22url%28%23rf%29%22%20stroke-width%3D%223%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.55%22%2F%3E%3C%2Fg%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%22100%22%20r%3D%2260%22%20fill%3D%22url%28%23gf%29%22%2F%3E%3Cg%20clip-path%3D%22url%28%23cf%29%22%20fill%3D%22none%22%20stroke%3D%22%23d8fbff%22%20stroke-opacity%3D%22.5%22%20stroke-width%3D%221.4%22%3E%3Cellipse%20cx%3D%22100%22%20cy%3D%22100%22%20rx%3D%2226%22%20ry%3D%2260%22%2F%3E%3Cellipse%20cx%3D%22100%22%20cy%3D%22100%22%20rx%3D%2248%22%20ry%3D%2260%22%2F%3E%3Cpath%20d%3D%22M40%20100H160M48%2074H152M48%20126H152M64%2052H136M64%20148H136%22%2F%3E%3Cpath%20d%3D%22M62%2088c14-12%2026-4%2034-12s6-14%2020-10%2018%2016%208%2024-18%202-22%2012-18%2014-26%206-4-14-14-20z%22%20fill%3D%22%235be3a5%22%20stroke%3D%22none%22%20opacity%3D%22.55%22%2F%3E%3C%2Fg%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%22100%22%20r%3D%2260%22%20fill%3D%22none%22%20stroke%3D%22%23bff4ff%22%20stroke-opacity%3D%22.6%22%20stroke-width%3D%221.5%22%2F%3E%3Cg%20transform%3D%22rotate%28-24%20100%20100%29%22%3E%3Cpath%20class%3D%22orb%22%20d%3D%22M8%20100A92%2030%200%200%200%20192%20100%22%20fill%3D%22none%22%20stroke%3D%22url%28%23rf%29%22%20stroke-width%3D%224%22%20stroke-linecap%3D%22round%22%2F%3E%3Ccircle%20class%3D%22sat%22%20cx%3D%22100%22%20cy%3D%22130%22%20r%3D%226.5%22%20fill%3D%22%23ffd24d%22%2F%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%22130%22%20r%3D%2211%22%20fill%3D%22none%22%20stroke%3D%22%23ffd24d%22%20stroke-opacity%3D%22.5%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E">
 <meta name="theme-color" content="#02040a">
 <meta name="description" content="EcoSphere-4D: an interactive 3D Earth that mixes real NASA and weather data with IPCC AR6 projections. NASA Space Apps Challenge 2026.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -80,6 +87,23 @@ header nav button{padding:5px 10px;font-size:14px}
 #dir .row{margin-top:8px}
 #dir .bar{height:3px;background:var(--line);margin-top:8px;border-radius:2px;overflow:hidden}
 #dir .bar i{display:block;height:100%;width:0;background:var(--neon)}
+#splash{position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:radial-gradient(ellipse at 50% 42%,#04223f 0,#020b18 55%,#010309 100%);transition:opacity .7s;cursor:pointer}
+#splash.off{opacity:0;pointer-events:none}
+#splash .lg{width:min(46vmin,300px);animation:spIn 1.1s cubic-bezier(.2,.8,.2,1) both;filter:drop-shadow(0 0 28px #18c8ff66)}
+#splash .lg svg{width:100%;height:auto;display:block;overflow:visible}
+#splash .orb{stroke-dasharray:300;stroke-dashoffset:300;animation:spDraw 1.6s .2s ease-out forwards}
+#splash .sat{animation:spPulse 1.4s 1s ease-in-out infinite}
+#splash .wm{font:700 clamp(22px,6vw,40px) Orbitron,sans-serif;letter-spacing:.22em;color:#e8fbff;animation:spUp .9s .5s both;text-indent:.22em}
+#splash .wm span{color:#18c8ff}
+#splash .tg{font:600 clamp(10px,2.4vw,13px) Orbitron,sans-serif;letter-spacing:.34em;color:#ffd24d;animation:spUp .9s .8s both;text-indent:.34em}
+#splash .bar{width:min(54vw,240px);height:3px;background:#18c8ff22;border-radius:3px;overflow:hidden;margin-top:10px;animation:spUp .6s 1s both}
+#splash .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffd24d,#18c8ff);animation:spBar 1.7s 1s ease-in-out forwards}
+@keyframes spIn{from{opacity:0;transform:scale(.7) rotate(-12deg)}to{opacity:1;transform:none}}
+@keyframes spDraw{to{stroke-dashoffset:0}}
+@keyframes spUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes spBar{to{width:100%}}
+@keyframes spPulse{50%{opacity:.35}}
+@media (prefers-reduced-motion:reduce){#splash *{animation-duration:.01s!important;animation-delay:0s!important}}
 #intro{position:fixed;inset:0;z-index:60;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;overflow:auto;background:radial-gradient(ellipse at center,#02101fcc,#010309f4);backdrop-filter:blur(3px);transition:opacity .6s}
 #intro.off{opacity:0;pointer-events:none}
 #intro h1{font-size:clamp(22px,5vw,44px);letter-spacing:.14em;margin:6px 0}
@@ -102,7 +126,9 @@ body.cinema #dir p{font-size:18px}
 </style>
 </head>
 <body>
-<header><h1>ECOSPHERE-4D</h1><span>NASA Space Apps 2026 &middot; Observe, simulate and project the Earth in 4D</span><nav id="nav" aria-label="Screens"><button id="nStory">Guided tour</button><button id="nCmp">Compare</button><button id="nSci">Science</button><button id="nRep">Report</button><button id="nSrc">Sources</button><button id="nAbout">About</button><button id="nCin">Cinema &#9654;</button></nav></header>
+<div id="splash" role="img" aria-label="ECOSPHERE-4D"><div class="lg"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" ><defs><radialGradient id="gs" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#7defff"/><stop offset=".45" stop-color="#1a8fe0"/><stop offset="1" stop-color="#06285a"/></radialGradient><linearGradient id="rs" x1="0" x2="1"><stop offset="0" stop-color="#ffd24d"/><stop offset="1" stop-color="#18c8ff"/></linearGradient><clipPath id="cs"><circle cx="100" cy="100" r="60"/></clipPath></defs><g transform="rotate(-24 100 100)"><path class="orb" d="M8 100A92 30 0 0 1 192 100" fill="none" stroke="url(#rs)" stroke-width="3" stroke-linecap="round" opacity=".55"/></g><circle cx="100" cy="100" r="60" fill="url(#gs)"/><g clip-path="url(#cs)" fill="none" stroke="#d8fbff" stroke-opacity=".5" stroke-width="1.4"><ellipse cx="100" cy="100" rx="26" ry="60"/><ellipse cx="100" cy="100" rx="48" ry="60"/><path d="M40 100H160M48 74H152M48 126H152M64 52H136M64 148H136"/><path d="M62 88c14-12 26-4 34-12s6-14 20-10 18 16 8 24-18 2-22 12-18 14-26 6-4-14-14-20z" fill="#5be3a5" stroke="none" opacity=".55"/></g><circle cx="100" cy="100" r="60" fill="none" stroke="#bff4ff" stroke-opacity=".6" stroke-width="1.5"/><g transform="rotate(-24 100 100)"><path class="orb" d="M8 100A92 30 0 0 0 192 100" fill="none" stroke="url(#rs)" stroke-width="4" stroke-linecap="round"/><circle class="sat" cx="100" cy="130" r="6.5" fill="#ffd24d"/><circle cx="100" cy="130" r="11" fill="none" stroke="#ffd24d" stroke-opacity=".5"/></g></svg></div><div class="wm">ECOSPHERE<span>-4D</span></div><div class="tg">EARTH IN FOUR DIMENSIONS</div><div class="bar"><i></i></div></div>
+<script>(function(){var t0=performance.now(),sp=document.getElementById("splash"),done=false;function go(){if(done)return;done=true;sp.classList.add("off");setTimeout(function(){sp.remove()},800)}sp.onclick=go;window.addEventListener("load",function(){setTimeout(go,Math.max(300,3000-(performance.now()-t0)))});setTimeout(go,9000)})()</script>
+<header><h1><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="height:1.15em;width:1.15em;vertical-align:-.22em;margin-right:.4em"><defs><radialGradient id="gh" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#7defff"/><stop offset=".45" stop-color="#1a8fe0"/><stop offset="1" stop-color="#06285a"/></radialGradient><linearGradient id="rh" x1="0" x2="1"><stop offset="0" stop-color="#ffd24d"/><stop offset="1" stop-color="#18c8ff"/></linearGradient><clipPath id="ch"><circle cx="100" cy="100" r="60"/></clipPath></defs><g transform="rotate(-24 100 100)"><path class="orb" d="M8 100A92 30 0 0 1 192 100" fill="none" stroke="url(#rh)" stroke-width="3" stroke-linecap="round" opacity=".55"/></g><circle cx="100" cy="100" r="60" fill="url(#gh)"/><g clip-path="url(#ch)" fill="none" stroke="#d8fbff" stroke-opacity=".5" stroke-width="1.4"><ellipse cx="100" cy="100" rx="26" ry="60"/><ellipse cx="100" cy="100" rx="48" ry="60"/><path d="M40 100H160M48 74H152M48 126H152M64 52H136M64 148H136"/><path d="M62 88c14-12 26-4 34-12s6-14 20-10 18 16 8 24-18 2-22 12-18 14-26 6-4-14-14-20z" fill="#5be3a5" stroke="none" opacity=".55"/></g><circle cx="100" cy="100" r="60" fill="none" stroke="#bff4ff" stroke-opacity=".6" stroke-width="1.5"/><g transform="rotate(-24 100 100)"><path class="orb" d="M8 100A92 30 0 0 0 192 100" fill="none" stroke="url(#rh)" stroke-width="4" stroke-linecap="round"/><circle class="sat" cx="100" cy="130" r="6.5" fill="#ffd24d"/><circle cx="100" cy="130" r="11" fill="none" stroke="#ffd24d" stroke-opacity=".5"/></g></svg>ECOSPHERE-4D</h1><span>NASA Space Apps 2026 &middot; Observe, simulate and project the Earth in 4D</span><nav id="nav" aria-label="Screens"><button id="nStory">Guided tour</button><button id="nCmp">Compare</button><button id="nSci">Science</button><button id="nRep">Report</button><button id="nSrc">Sources</button><button id="nAbout">About</button><button id="nCin">Cinema &#9654;</button></nav></header>
 <main>
 <section class="box" id="stage" aria-label="Interactive 3D Earth">
 <div id="hud"><b id="hudYear">2025</b><div id="hudSc"></div><div id="hudPos">Click the globe to lock a location</div></div>
@@ -304,7 +330,7 @@ const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 100);
 camera.position.z = 3.6;
 let zT = 3.6;
 const HMIN = 0.0001; /* closest the camera may get: about 640 m above the ground (altitude = camera distance - 1 Earth radius) */
-const SAT = {k: 0, on: true}; /* k = how much satellite photo is draped on the globe (0..1) */
+const SAT = {k: 0, on: true, h: 2.6, tilt: 0, te: 0, tp: false}; /* k = how much satellite photo is draped on the globe (0..1) */
 
 const solid = (r, g, b, a) => { const t = new THREE.DataTexture(new Uint8Array([r, g, b, a]), 1, 1, THREE.RGBAFormat); t.needsUpdate = true; return t; };
 const mkTex = (w, ht) => { const t = new THREE.DataTexture(new Uint8Array(w * ht * 4), w, ht, THREE.RGBAFormat); t.wrapS = THREE.RepeatWrapping; t.minFilter = t.magFilter = THREE.LinearFilter; t.needsUpdate = true; return t; };
@@ -439,7 +465,7 @@ function place(lat, lon) {
 let drag = false, px = 0, py = 0, sx = 0, sy = 0, auto = true, tgt = null;
 const wrap = a => Math.atan2(Math.sin(a), Math.cos(a));
 const focus = (lat, lon, keep) => { auto = false; tgt = {y: -Math.PI / 2 - lon * Math.PI / 180, x: Math.max(-1.45, Math.min(1.45, lat * Math.PI / 180))}; if (!keep) zT = 2.4; };
-const dragRate = () => Math.min(0.006 * camera.position.z / 3.6, 0.0035 * (camera.position.z - 1)); /* drag speed follows the altitude, so a finger moves the ground about 1:1 even at street level */
+const dragRate = () => Math.min(0.006 * (1 + SAT.h) / 3.6, 0.0035 * SAT.h); /* drag speed follows the altitude, so a finger moves the ground about 1:1 even at street level */
 const _gInv = new THREE.Matrix4(), _gO = new THREE.Vector3(), _gD = new THREE.Vector3();
 function rayLatLon(rr) { /* exact ray / unit-sphere hit in the globe's own frame (the mesh is faceted, far too coarse at street level) */
   earth.updateMatrixWorld(); _gInv.copy(earth.matrixWorld).invert();
@@ -491,13 +517,15 @@ let _af = 0, _at = performance.now();
   if (!reduce) { if (!cu.real.value) clouds.rotation.y += 0.00025; ring.scale.setScalar(1 + 0.25 * Math.sin(performance.now() / 350)); }
   cu.time.value = performance.now() / 1000;
   for (const k in tg) uni[k].value += (tg[k] - uni[k].value) * 0.06;
-  { const hT = Math.max(1e-6, zT - 1), hC = Math.max(1e-6, camera.position.z - 1), g = Math.log(hT / hC);
-    camera.position.z = 1 + (Math.abs(g) < 1e-4 ? hT : hC * Math.exp(g * 0.1)); /* ease in log-space: same feel from 20 000 km down to 600 m */
-    const h = camera.position.z - 1, nr = Math.max(1e-6, Math.min(0.1, h * 0.25));
+  { const hT = Math.max(1e-6, zT - 1), hC = Math.max(1e-6, SAT.h), g = Math.log(hT / hC);
+    const h = SAT.h = (Math.abs(g) < 1e-4 ? hT : hC * Math.exp(g * 0.1)); /* ease in log-space: same feel from 20 000 km down to 600 m */
+    SAT.te = SAT.tilt * Math.max(0, Math.min(1, (1.5 - (1 + h)) / 0.3)); /* tilt only when close to the ground */
+    if (SAT.te > 0.001 || SAT.tp) { camera.position.set(0, -h * Math.sin(SAT.te), 1 + h * Math.cos(SAT.te)); camera.lookAt(0, 0, 1); SAT.tp = SAT.te > 0.001; } else camera.position.z = 1 + h;
+    const nr = Math.max(1e-6, Math.min(0.1, h * 0.2));
     if (Math.abs(nr - camera.near) > camera.near * 0.01) { camera.near = nr; camera.updateProjectionMatrix(); }
     cu.fade.value = Math.max(0, Math.min(1, (h - 0.02) / 0.2)); /* clouds thin out as you approach the ground */
-    atmos.material.uniforms.k.value = Math.max(0, Math.min(1, (camera.position.z - 1.1) / 0.12)); /* the limb glow only makes sense from outside the atmosphere */
-    if (camera.position.z < 1.6) auto = false; }
+    atmos.material.uniforms.k.value = Math.max(0, Math.min(1, (h - 0.1) / 0.12)); /* the limb glow only makes sense from outside the atmosphere */
+    if (h < 0.6) auto = false; }
   earth.updateMatrixWorld();
   uni.sun.value.copy(sunLocal()).applyQuaternion(earth.quaternion).normalize();
   renderer.render(scene, camera);
@@ -1507,7 +1535,7 @@ loadHistory().catch(e => log("Storm history unavailable: " + e.message + " (gene
 
   /* ---------- intro ---------- */
   const intro = document.createElement("div"); intro.id = "intro"; intro.setAttribute("role", "dialog"); intro.setAttribute("aria-modal", "true"); intro.setAttribute("aria-labelledby", "introT");
-  intro.innerHTML = '<div style="width:100%;max-width:880px;margin:auto"><div class="sub">NASA SPACE APPS CHALLENGE 2026</div><h1 id="introT">ECOSPHERE-4D</h1>' +
+  intro.innerHTML = '<div style="width:100%;max-width:880px;margin:auto"><div style="width:96px;margin:0 auto 6px;filter:drop-shadow(0 0 16px #18c8ff55)"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" ><defs><radialGradient id="gi" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#7defff"/><stop offset=".45" stop-color="#1a8fe0"/><stop offset="1" stop-color="#06285a"/></radialGradient><linearGradient id="ri" x1="0" x2="1"><stop offset="0" stop-color="#ffd24d"/><stop offset="1" stop-color="#18c8ff"/></linearGradient><clipPath id="ci"><circle cx="100" cy="100" r="60"/></clipPath></defs><g transform="rotate(-24 100 100)"><path class="orb" d="M8 100A92 30 0 0 1 192 100" fill="none" stroke="url(#ri)" stroke-width="3" stroke-linecap="round" opacity=".55"/></g><circle cx="100" cy="100" r="60" fill="url(#gi)"/><g clip-path="url(#ci)" fill="none" stroke="#d8fbff" stroke-opacity=".5" stroke-width="1.4"><ellipse cx="100" cy="100" rx="26" ry="60"/><ellipse cx="100" cy="100" rx="48" ry="60"/><path d="M40 100H160M48 74H152M48 126H152M64 52H136M64 148H136"/><path d="M62 88c14-12 26-4 34-12s6-14 20-10 18 16 8 24-18 2-22 12-18 14-26 6-4-14-14-20z" fill="#5be3a5" stroke="none" opacity=".55"/></g><circle cx="100" cy="100" r="60" fill="none" stroke="#bff4ff" stroke-opacity=".6" stroke-width="1.5"/><g transform="rotate(-24 100 100)"><path class="orb" d="M8 100A92 30 0 0 0 192 100" fill="none" stroke="url(#ri)" stroke-width="4" stroke-linecap="round"/><circle class="sat" cx="100" cy="130" r="6.5" fill="#ffd24d"/><circle cx="100" cy="130" r="11" fill="none" stroke="#ffd24d" stroke-opacity=".5"/></g></svg></div><div class="sub">NASA SPACE APPS CHALLENGE 2026</div><h1 id="introT">ECOSPHERE-4D</h1>' +
     '<p class="lead">Earth in four dimensions: three of space and one of time. See today\'s planet from real NASA data, then watch where current trends may lead.</p>' +
     '<div class="pil"><div><b>REAL</b>NASA GIBS satellite imagery and NASA POWER climate records, loaded live.</div><div><b>LIVE</b>Wind, ocean currents and storms driven by current atmosphere and sea-surface data.</div><div><b>FUTURE</b>IPCC AR6 pathways from SSP1-1.9 to SSP5-8.5, always with uncertainty ranges.</div></div>' +
     '<div class="row"><button id="inGo">Start investigating</button><button id="inTour">Guided tour</button><button id="inCin">Cinema mode \u25b6</button></div><div class="chips" id="inFeeds"></div></div>';
@@ -1930,102 +1958,193 @@ loadHistory().catch(e => log("Storm history unavailable: " + e.message + " (gene
   window.__geoPick = (la, lo) => pick(la, lo, true); /* globe taps fill the same info card; zooming never switches to the flat map any more */
   setInterval(updIss, 10000);
 })();
-/* ======== v12: seamless zoom. Esri World Imagery tiles are draped on the 3D globe itself, so zooming in never leaves the Earth ======== */
+/* ======== v12/v13: seamless zoom on the 3D globe + Time Machine + flood what-if + 3D relief + share/report + data trust ======== */
 (function () {
-  const TILE = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/", RM = 6371008.8, D2R = Math.PI / 180;
-  const MAXZ = 18, BUDGET = LOWP ? 30 : 56, KEEP = LOWP ? 110 : 220, PAR = LOWP ? 6 : 10;
-  const group = new THREE.Group(); group.visible = false; earth.add(group);
-  const tiles = new Map(), _q = new THREE.Quaternion(), _v = new THREE.Vector3(), _m = new THREE.Matrix4();
-  let queue = [], busy = 0, frame = 0, stamp = 0, curZ = null, okCount = 0, failCount = 0, logged = false;
-  const VSH = "varying vec2 vUv;varying vec3 vWN;void main(){vUv=uv;vWN=normalize(mat3(modelMatrix)*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}";
-  const FSH = "uniform sampler2D map;uniform vec3 sun;uniform float op;varying vec2 vUv;varying vec3 vWN;void main(){vec3 c=texture2D(map,vUv).rgb;float d=dot(normalize(vWN),sun),day=smoothstep(-.12,.25,d);float lit=mix(.03+day*(.3+.8*max(d,0.)),.95,.6);gl_FragColor=vec4(c*lit,op);}";
-  const tx = lon => (lon + 180) / 360;
-  const ty = lat => { const s = Math.sin(lat * D2R); return 0.5 - Math.log((1 + s) / (1 - s)) / (4 * Math.PI); };
+  const RM = 6371008.8, D2R = Math.PI / 180, BUD = LOWP ? 30 : 56, KEEP = LOWP ? 110 : 220, PAR = LOWP ? 6 : 10;
+  const ESRI = (Z, X, Y) => "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/" + Z + "/" + Y + "/" + X;
+  const TM = {on: false, cmp: false, year: Y0 - 10, split: 0.5};
+  const FL = {on: false, extra: 0};
+  const dateOf = y => y + "-07-15";
+  const MODIS = (Z, X, Y) => "https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/" + dateOf(TM.year) + "/GoogleMapsCompatible_Level9/" + Z + "/" + Y + "/" + X + ".jpg";
+  const DEMU = (Z, X, Y) => "https://s3.amazonaws.com/elevation-tiles-prod/terrarium/" + Z + "/" + X + "/" + Y + ".png";
+  const tx = lon => (lon + 180) / 360, ty = lat => { const s = Math.sin(lat * D2R); return 0.5 - Math.log((1 + s) / (1 - s)) / (4 * Math.PI); };
   const lonOf = u => u * 360 - 180, latOf = v => Math.atan(Math.sinh(Math.PI * (1 - 2 * v))) / D2R;
   const vec = (lat, lon) => { const a = lat * D2R, o = lon * D2R, c = Math.cos(a); return [c * Math.cos(o), Math.sin(a), -c * Math.sin(o)]; };
+  const U = {sp: {value: 0}, ex: {value: 3}, hs: {value: 1}, fl: {value: 0}};
+  SAT.ex = 3; SAT.tilt = 0; SAT.h = 2.6;
+  const VSH = "varying vec2 vUv;varying vec3 vWN;void main(){vUv=uv;vWN=normalize(mat3(modelMatrix)*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}";
+  const FSH = "uniform sampler2D map,dem;uniform vec3 sun;uniform vec4 dr;uniform float op,sp,sd,fl,hs,ex,mpt,hd;varying vec2 vUv;varying vec3 vWN;" +
+    "float de(vec2 q){vec4 c=floor(texture2D(dem,clamp(q,.002,.998))*255.+.5);return c.r*256.+c.g+c.b/256.-32768.;}" +
+    "float eb(vec2 p){vec2 q=(dr.xy+p*dr.z)*256.-.5,f=fract(q),b=(floor(q)+.5)/256.;float a=de(b),c=de(b+vec2(1./256.,0.)),d=de(b+vec2(0.,1./256.)),e=de(b+vec2(1./256.));return mix(mix(a,c,f.x),mix(d,e,f.x),f.y);}" +
+    "void main(){if(sd>0.&&gl_FragCoord.x>sp)discard;if(sd<0.&&gl_FragCoord.x<=sp)discard;vec3 c=texture2D(map,vUv).rgb;" +
+    "if(hd>.5){float t=1./(256.*dr.z),e0=eb(vUv),a=eb(vUv+vec2(t,0.)),b=eb(vUv-vec2(t,0.)),u=eb(vUv+vec2(0.,t)),d=eb(vUv-vec2(0.,t));" +
+    "vec3 n=normalize(vec3(-(a-b)/(2.*mpt)*ex,-(u-d)/(2.*mpt)*ex,1.)),L=normalize(vec3(-.55,.6,.58));c*=mix(1.,clamp(dot(n,L)/L.z,.3,1.7),hs);" +
+    "if(fl>.01){float w=step(0.,e0)*smoothstep(fl+.25,fl-.25,e0);c=mix(c,vec3(.04,.38,.85),w*.72);c+=vec3(0.,.25,.4)*smoothstep(.5,0.,abs(e0-fl))*step(0.,e0);}}" +
+    "float dd=dot(normalize(vWN),sun),day=smoothstep(-.12,.25,dd);float lit=mix(.03+day*(.3+.8*max(dd,0.)),.95,.6);gl_FragColor=vec4(c*lit,op);}";
+  const dummy = new THREE.DataTexture(new Uint8Array([0, 0, 0, 255]), 1, 1); dummy.needsUpdate = true;
+  const dems = new Map();
+  let okCount = 0, failCount = 0, logged = false;
 
-  function build(t, img) { /* geometry is stored relative to the tile centre (float32 stays accurate down to centimetres) */
-    const n = 2 ** t.Z, seg = t.Z <= 9 ? 12 : t.Z <= 13 ? 6 : 4, C = vec(latOf((t.Y + 0.5) / n), lonOf((t.X + 0.5) / n));
-    let ex = C[2], ez = -C[0]; const el_ = Math.hypot(ex, ez) || 1; ex /= el_; ez /= el_;
-    const E = [ex, 0, ez], N = [C[1] * ez, C[2] * ex - C[0] * ez, -C[1] * ex];
-    const pos = new Float32Array((seg + 1) ** 2 * 3), nor = new Float32Array(pos.length), uv = new Float32Array((seg + 1) ** 2 * 2), idx = [];
-    for (let j = 0; j <= seg; j++) for (let i = 0; i <= seg; i++) {
-      const k = j * (seg + 1) + i, P = vec(latOf((t.Y + j / seg) / n), lonOf((t.X + i / seg) / n));
-      const d = [P[0] - C[0], P[1] - C[1], P[2] - C[2]], dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-      pos[k * 3] = dot(d, E); pos[k * 3 + 1] = dot(d, N); pos[k * 3 + 2] = dot(d, C);
-      nor[k * 3] = dot(P, E); nor[k * 3 + 1] = dot(P, N); nor[k * 3 + 2] = dot(P, C);
-      uv[k * 2] = i / seg; uv[k * 2 + 1] = 1 - j / seg;
-      if (i < seg && j < seg) { const a = k, b = k + 1, c = k + seg + 1, e = c + 1; idx.push(a, c, b, b, c, e); }
-    }
-    const g = new THREE.BufferGeometry();
-    g.setAttribute("position", new THREE.BufferAttribute(pos, 3)); g.setAttribute("normal", new THREE.BufferAttribute(nor, 3)); g.setAttribute("uv", new THREE.BufferAttribute(uv, 2)); g.setIndex(idx);
-    const tex = new THREE.Texture(img); tex.anisotropy = 4; tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping; tex.needsUpdate = true;
-    const mat = new THREE.ShaderMaterial({uniforms: {map: {value: tex}, sun: uni.sun, op: {value: 0}}, vertexShader: VSH, fragmentShader: FSH,
-      transparent: true, depthWrite: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4});
-    const m = new THREE.Mesh(g, mat);
-    m.position.set(C[0], C[1], C[2]); m.quaternion.setFromRotationMatrix(_m.makeBasis(new THREE.Vector3(...E), new THREE.Vector3(...N), new THREE.Vector3(...C)));
-    m.renderOrder = t.Z - 40; /* drawn before wind, clouds and storms, so those stay visible on top of the photos */
-    t.mesh = m; t.mat = mat; t.tex = tex; group.add(m);
-  }
-  function drop(t) {
-    t.dead = true;
-    if (t.mesh) { group.remove(t.mesh); t.mesh.geometry.dispose(); t.mat.dispose(); t.tex.dispose(); }
-    tiles.delete(t.key);
-  }
-  function pump() {
-    while (busy < PAR && queue.length) {
-      const t = queue.shift(); if (t.state !== 0 || t.dead) continue;
-      t.state = 1; busy++;
+  function Layer(o) {
+    const L = {group: new THREE.Group(), tiles: new Map(), queue: [], busy: 0, stamp: 0, curZ: null, k: 0, target: 0, sd: {value: o.sd || 0}, key: ""};
+    L.group.visible = false; earth.add(L.group);
+    function loadDem(t) {
+      const dz = Math.min(t.Z, 14), d = t.Z - dz, ax = t.X >> d, ay = t.Y >> d, key = dz + "/" + ax + "/" + ay, sz = 1 / 2 ** d;
+      const use = e => { if (t.dead || !t.mesh) return; e.refs++; t.dem = e; applyDem(t, [(t.X - ax * 2 ** d) * sz, 1 - (t.Y - ay * 2 ** d) * sz - sz, sz], dz); };
+      let e = dems.get(key);
+      if (e) { e.t = performance.now(); if (e.ready) use(e); else if (!e.bad) e.cbs.push(use); return; }
+      e = {ready: false, bad: false, cbs: [use], refs: 0, t: performance.now()}; dems.set(key, e);
       const img = new Image(); img.crossOrigin = "anonymous";
-      img.onload = () => { busy--; if (!t.dead) { t.state = 2; okCount++; try { build(t, img); } catch (e) { t.state = 3; t.retry = performance.now() + 20000; } if (!logged) { logged = true; log("Zoom in as far as you like: real satellite photos (Esri World Imagery) are draped on the 3D globe itself, no map switch.", "ok"); } } pump(); };
-      img.onerror = () => { busy--; failCount++; t.state = 3; t.retry = performance.now() + 15000;
-        if (!okCount && failCount >= 8 && SAT.on) { SAT.on = false; log("Satellite photo tiles could not be loaded (network or browser blocked them). The globe keeps its normal textures.", "warn"); } pump(); };
-      img.src = TILE + t.Z + "/" + t.Y + "/" + t.X;
+      img.onload = () => { const c = document.createElement("canvas"); c.width = c.height = 256; const g = c.getContext("2d"); g.drawImage(img, 0, 0);
+        e.data = g.getImageData(0, 0, 256, 256).data; e.tex = new THREE.Texture(img); e.tex.magFilter = e.tex.minFilter = THREE.NearestFilter; e.tex.generateMipmaps = false; e.tex.needsUpdate = true; e.ready = true; e.cbs.forEach(f => f(e)); e.cbs = []; };
+      img.onerror = () => { e.bad = true; dems.delete(key); };
+      img.src = DEMU(dz, ax, ay);
+      if (dems.size > 70) for (const [k, v] of dems) { if (dems.size <= 60) break; if (v.refs <= 0 && v.ready) { v.tex.dispose(); dems.delete(k); } }
     }
+    function applyDem(t, r, dz) {
+      const e = t.dem, u = t.mat.uniforms, seg = t.seg; u.dem.value = e.tex; u.dr.value.set(r[0], r[1], r[2], 0); u.hd.value = 1;
+      u.mpt.value = 156543.034 * Math.cos(t.latC * D2R) / 2 ** dz;
+      t.elev = new Float32Array((seg + 1) ** 2);
+      for (let j = 0; j <= seg; j++) for (let i = 0; i <= seg; i++) {
+        const px = Math.min(255, Math.floor((r[0] + (i / seg) * r[2]) * 256)), py = Math.min(255, Math.floor((1 - r[1] - r[2] + (j / seg) * r[2]) * 256)), p = (py * 256 + px) * 4;
+        t.elev[j * (seg + 1) + i] = Math.max(0, e.data[p] * 256 + e.data[p + 1] + e.data[p + 2] / 256 - 32768);
+      }
+      L.lift(t);
+    }
+    L.lift = t => { if (!t.elev) return; const P = t.mesh.geometry.attributes.position, N = t.mesh.geometry.attributes.normal, k = SAT.ex / RM;
+      for (let v = 0; v < t.elev.length; v++) { const h = t.elev[v] * k; P.array[v * 3] = t.base[v * 3] + N.array[v * 3] * h; P.array[v * 3 + 1] = t.base[v * 3 + 1] + N.array[v * 3 + 1] * h; P.array[v * 3 + 2] = t.base[v * 3 + 2] + N.array[v * 3 + 2] * h; }
+      P.needsUpdate = true; t.mesh.geometry.computeBoundingSphere(); };
+    function build(t, img) { /* geometry is stored relative to the tile centre, so float32 stays accurate down to centimetres */
+      const n = 2 ** t.Z, seg = t.seg = t.Z <= 9 ? 12 : t.Z <= 13 ? 8 : 6; t.latC = latOf((t.Y + 0.5) / n);
+      const C = vec(t.latC, lonOf((t.X + 0.5) / n)); let ex = C[2], ez = -C[0]; const el_ = Math.hypot(ex, ez) || 1; ex /= el_; ez /= el_;
+      const E = [ex, 0, ez], N = [C[1] * ez, C[2] * ex - C[0] * ez, -C[1] * ex];
+      const pos = new Float32Array((seg + 1) ** 2 * 3), nor = new Float32Array(pos.length), uv = new Float32Array((seg + 1) ** 2 * 2), idx = [];
+      const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+      for (let j = 0; j <= seg; j++) for (let i = 0; i <= seg; i++) {
+        const k = j * (seg + 1) + i, P = vec(latOf((t.Y + j / seg) / n), lonOf((t.X + i / seg) / n)), d = [P[0] - C[0], P[1] - C[1], P[2] - C[2]];
+        pos[k * 3] = dot(d, E); pos[k * 3 + 1] = dot(d, N); pos[k * 3 + 2] = dot(d, C); nor[k * 3] = dot(P, E); nor[k * 3 + 1] = dot(P, N); nor[k * 3 + 2] = dot(P, C);
+        uv[k * 2] = i / seg; uv[k * 2 + 1] = 1 - j / seg;
+        if (i < seg && j < seg) { const a = k, b = k + 1, c = k + seg + 1, e = c + 1; idx.push(a, c, b, b, c, e); }
+      }
+      t.base = pos.slice();
+      const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.BufferAttribute(pos, 3)); g.setAttribute("normal", new THREE.BufferAttribute(nor, 3)); g.setAttribute("uv", new THREE.BufferAttribute(uv, 2)); g.setIndex(idx);
+      const tex = new THREE.Texture(img); tex.anisotropy = 4; tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping; tex.needsUpdate = true;
+      const mat = new THREE.ShaderMaterial({uniforms: {map: {value: tex}, dem: {value: dummy}, sun: uni.sun, op: {value: 0}, dr: {value: new THREE.Vector4(0, 0, 1, 0)}, mpt: {value: 10}, hd: {value: 0}, sp: U.sp, sd: L.sd, fl: U.fl, hs: U.hs, ex: U.ex},
+        vertexShader: VSH, fragmentShader: FSH, transparent: true, depthWrite: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4});
+      const m = new THREE.Mesh(g, mat); m.position.set(C[0], C[1], C[2]);
+      m.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(new THREE.Vector3(...E), new THREE.Vector3(...N), new THREE.Vector3(...C)));
+      m.renderOrder = o.order + t.Z; t.mesh = m; t.mat = mat; t.tex = tex; L.group.add(m);
+      if (o.dem && t.Z >= 8) loadDem(t);
+    }
+    function drop(t) { t.dead = true; if (t.dem) t.dem.refs--; if (t.mesh) { L.group.remove(t.mesh); t.mesh.geometry.dispose(); t.mat.dispose(); t.tex.dispose(); } L.tiles.delete(t.key); }
+    L.clear = () => { for (const t of [...L.tiles.values()]) drop(t); L.queue = []; };
+    function pump() {
+      while (L.busy < PAR && L.queue.length) {
+        const t = L.queue.shift(); if (t.state !== 0 || t.dead) continue; t.state = 1; L.busy++;
+        const img = new Image(); img.crossOrigin = "anonymous";
+        img.onload = () => { L.busy--; if (!t.dead) { t.state = 2; okCount++; try { build(t, img); } catch (e) { t.state = 3; t.retry = performance.now() + 20000; }
+          if (!logged) { logged = true; log("Zoom in as far as you like: real satellite photos (Esri World Imagery) are draped on the 3D globe itself, no map switch.", "ok"); } } pump(); };
+        img.onerror = () => { L.busy--; failCount++; t.state = 3; t.retry = performance.now() + 15000;
+          if (!okCount && failCount >= 8 && SAT.on) { SAT.on = false; log("Satellite photo tiles could not be loaded (network or browser blocked them). The globe keeps its normal textures.", "warn"); } pump(); };
+        img.src = o.url(t.Z, t.X, t.Y);
+      }
+    }
+    const _q = new THREE.Quaternion(), _v = new THREE.Vector3();
+    L.refresh = () => {
+      L.stamp++; const h = SAT.h, z = 1 + h, now = performance.now(), te = SAT.te || 0;
+      _q.copy(earth.quaternion).invert(); _v.set(0, 0, 1).applyQuaternion(_q);
+      const lat0 = Math.asin(Math.max(-1, Math.min(1, _v.y))) / D2R, lon0 = Math.atan2(-_v.z, _v.x) / D2R;
+      const aspect = camera.aspect || 1, tanH = Math.tan(camera.fov * D2R / 2), Hpx = Math.max(300, el.height);
+      const Zf = Math.log2(156543.034 * Math.max(0.05, Math.cos(lat0 * D2R)) / (2 * h * RM * tanH / Hpx));
+      if (L.curZ === null || Math.abs(Zf - L.curZ) > 0.7) L.curZ = Math.round(Zf);
+      const beta = Math.atan(tanH * Math.sqrt(1 + aspect * aspect)), sb = z * Math.sin(beta);
+      const th = Math.min(1.2, (sb < 1 ? Math.asin(sb) - beta : Math.acos(1 / z)) * 1.3 / Math.max(0.35, Math.cos(te)) + 1e-7);
+      let Z = Math.max(2, Math.min(o.maxZ, L.curZ)), n, x0, x1, y0, y1;
+      for (;; Z--) { n = 2 ** Z; const dl = th / D2R, la1 = Math.max(-84, lat0 - dl), la2 = Math.min(84, lat0 + dl), cl = Math.cos(Math.min(84, Math.abs(lat0) + dl) * D2R), dlon = Math.min(180, dl / Math.max(cl, 0.05));
+        y0 = Math.max(0, Math.floor(ty(la2) * n)); y1 = Math.min(n - 1, Math.floor(ty(la1) * n)); x0 = Math.floor(tx(lon0 - dlon) * n); x1 = Math.floor(tx(lon0 + dlon) * n);
+        if (Math.min(n, x1 - x0 + 1) * (y1 - y0 + 1) <= BUD || Z <= 2) break; }
+      const cx = tx(lon0) * n, cy = ty(Math.max(-84, Math.min(84, lat0))) * n, want = [];
+      for (let j = y0; j <= y1; j++) for (let k = x0; k <= x1 && k - x0 < n; k++) {
+        const X = ((k % n) + n) % n, key = Z + "/" + X + "/" + j; let t = L.tiles.get(key);
+        if (!t) { t = {key, Z, X, Y: j, state: 0, f: 0, mesh: null, seen: 0, d: 0}; L.tiles.set(key, t); }
+        t.seen = L.stamp; let dk = k + 0.5 - cx; dk -= n * Math.round(dk / n); t.d = dk * dk + (j + 0.5 - cy) ** 2;
+        if (t.state === 3 && now > t.retry) t.state = 0; want.push(t);
+      }
+      L.queue = want.filter(t => t.state === 0).sort((a, b) => a.d - b.d); pump();
+      for (const t of [...L.tiles.values()]) if (L.stamp - t.seen > 60) drop(t);
+      if (L.tiles.size > KEEP) { const old = [...L.tiles.values()].filter(t => t.seen < L.stamp).sort((a, b) => a.seen - b.seen); for (const t of old) { if (L.tiles.size <= KEEP) break; drop(t); } }
+    };
+    L.tick = (dt, frame) => {
+      L.k += (L.target - L.k) * Math.min(1, dt * 6); if (Math.abs(L.target - L.k) < 0.002) L.k = L.target;
+      L.group.visible = L.k > 0.003; if (!L.group.visible) return;
+      if (frame % 8 === o.phase) L.refresh();
+      for (const t of L.tiles.values()) if (t.mesh) { t.f = Math.min(1, t.f + dt * 3.5); t.mat.uniforms.op.value = t.f * L.k; }
+    };
+    return L;
   }
-  function refresh() {
-    stamp++;
-    const z = camera.position.z, h = z - 1, now = performance.now();
-    _q.copy(earth.quaternion).invert(); _v.set(0, 0, 1).applyQuaternion(_q); /* surface point in the middle of the screen */
-    const lat0 = Math.asin(Math.max(-1, Math.min(1, _v.y))) / D2R, lon0 = Math.atan2(-_v.z, _v.x) / D2R;
-    const aspect = camera.aspect || 1, tanH = Math.tan(camera.fov * D2R / 2), Hpx = Math.max(300, el.height);
-    const mpp = 2 * h * RM * tanH / Hpx; /* metres per screen pixel at the centre */
-    const Zf = Math.log2(156543.034 * Math.max(0.05, Math.cos(lat0 * D2R)) / mpp);
-    if (curZ === null || Math.abs(Zf - curZ) > 0.7) curZ = Math.round(Zf);
-    const beta = Math.atan(tanH * Math.sqrt(1 + aspect * aspect)), sb = z * Math.sin(beta);
-    const th = Math.min(1.2, (sb < 1 ? Math.asin(sb) - beta : Math.acos(1 / z)) * 1.3 + 1e-7); /* angular radius of what is on screen, plus margin */
-    let Z = Math.max(2, Math.min(MAXZ, curZ)), n, x0, x1, y0, y1;
-    for (;; Z--) {
-      n = 2 ** Z;
-      const dl = th / D2R, la1 = Math.max(-84, lat0 - dl), la2 = Math.min(84, lat0 + dl);
-      const cl = Math.cos(Math.min(84, Math.abs(lat0) + dl) * D2R), dlon = Math.min(180, dl / Math.max(cl, 0.05));
-      y0 = Math.max(0, Math.floor(ty(la2) * n)); y1 = Math.min(n - 1, Math.floor(ty(la1) * n));
-      x0 = Math.floor(tx(lon0 - dlon) * n); x1 = Math.floor(tx(lon0 + dlon) * n);
-      if (Math.min(n, x1 - x0 + 1) * (y1 - y0 + 1) <= BUDGET || Z <= 2) break;
-    }
-    const cx = tx(lon0) * n, cy = ty(Math.max(-84, Math.min(84, lat0))) * n, want = [];
-    for (let j = y0; j <= y1; j++) for (let k = x0; k <= x1 && k - x0 < n; k++) {
-      const X = ((k % n) + n) % n, key = Z + "/" + X + "/" + j;
-      let t = tiles.get(key);
-      if (!t) { t = {key, Z, X, Y: j, state: 0, f: 0, mesh: null, seen: 0, d: 0}; tiles.set(key, t); }
-      t.seen = stamp; let dk = k + 0.5 - cx; dk -= n * Math.round(dk / n); t.d = dk * dk + (j + 0.5 - cy) ** 2;
-      if (t.state === 3 && now > t.retry) t.state = 0;
-      want.push(t);
-    }
-    queue = want.filter(t => t.state === 0).sort((a, b) => a.d - b.d); pump();
-    for (const t of [...tiles.values()]) if (stamp - t.seen > 60) drop(t);
-    if (tiles.size > KEEP) { const old = [...tiles.values()].filter(t => t.seen < stamp).sort((a, b) => a.seen - b.seen); for (const t of old) { if (tiles.size <= KEEP) break; drop(t); } }
-  }
-  let lastT = performance.now();
+  const base = Layer({url: ESRI, maxZ: 18, order: -40, dem: true, phase: 1}), tmL = Layer({url: MODIS, maxZ: 9, order: -70, sd: 1, phase: 5});
+  let modelKey = "", rise = 0, frame = 0, lastT = performance.now();
   (function tick(now) {
-    requestAnimationFrame(tick);
-    const dt = Math.min(0.1, (now - lastT) / 1000); lastT = now;
-    const target = SAT.on ? Math.max(0, Math.min(1, (1.42 - camera.position.z) / 0.17)) : 0; /* photos fade in between 1.42 and 1.25 Earth radii */
-    SAT.k += (target - SAT.k) * Math.min(1, dt * 6); if (Math.abs(target - SAT.k) < 0.002) SAT.k = target;
-    group.visible = SAT.k > 0.003; if (!group.visible) return;
-    if (++frame % 8 === 1) refresh();
-    for (const t of tiles.values()) if (t.mesh) { t.f = Math.min(1, t.f + dt * 3.5); t.mat.uniforms.op.value = t.f * SAT.k; }
+    requestAnimationFrame(tick); const dt = Math.min(0.1, (now - lastT) / 1000); lastT = now; frame++;
+    const z = 1 + SAT.h, r = (a, b) => Math.max(0, Math.min(1, (a - z) / b));
+    tmL.target = TM.on ? r(1.95, 0.2) : 0; tmL.sd.value = TM.cmp ? 1 : 0; base.sd.value = TM.on && TM.cmp ? -1 : 0;
+    base.target = SAT.on && !(TM.on && !TM.cmp && tmL.k > 0.9) ? r(1.42, 0.17) : 0;
+    SAT.k = Math.max(base.k, tmL.k); U.sp.value = TM.split * el.width;
+    const key = S.sc + S.year; if (key !== modelKey) { modelKey = key; rise = Math.max(0, model(S.sc, S.year).sl - model(S.sc, Y0).sl); }
+    U.fl.value = FL.on ? rise + FL.extra : 0; U.hs.value = Math.min(1.5, SAT.ex / 3); U.ex.value = SAT.ex;
+    base.tick(dt, frame); tmL.tick(dt, frame);
+    if (SAT.exDirty && frame % 4 === 0) { SAT.exDirty = false; for (const t of base.tiles.values()) base.lift(t); }
   })(performance.now());
+
+  /* ---------- UI ---------- */
+  const par = $("geoInfo").parentNode, b0 = par.querySelector("button"), card = document.createElement("div"), bcss = b0 ? b0.style.cssText : "";
+  card.style.cssText = "flex:1 1 100%;display:flex;flex-wrap:wrap;gap:6px;align-items:center;background:#021a30cc;border:1px solid #18c8ff55;border-radius:6px;padding:6px 8px;font:13px/1.4 Rajdhani,sans-serif;color:#cfeaff";
+  const btn = (t, f) => { const b = document.createElement("button"); b.style.cssText = bcss; b.textContent = t; b.onclick = () => f(b); return b; };
+  const rng = (min, max, val, step, f) => { const i = document.createElement("input"); i.type = "range"; i.min = min; i.max = max; i.step = step; i.value = val; i.style.cssText = "flex:1 1 120px;min-width:90px"; i.oninput = () => f(+i.value); return i; };
+  const lab = t => { const s = document.createElement("span"); s.textContent = t; return s; };
+  const head = document.createElement("div"); head.style.cssText = "flex:1 1 100%;color:#6fe3ff;font-weight:700;letter-spacing:.08em"; head.textContent = "EXPLORE: zoom in on a place first"; card.appendChild(head);
+  const tmLab = lab(""), setTm = () => { tmLab.textContent = "NASA MODIS true colour, " + TM.year + (TM.on ? "" : " (off)"); };
+  card.appendChild(btn("Time machine: OFF", b => { TM.on = !TM.on; b.textContent = "Time machine: " + (TM.on ? "ON" : "OFF"); setTm(); if (TM.on) { SAT.on = true; if (SAT.h > 0.9) zT = Math.min(zT, 1.6); log("Time machine: NASA satellite images of the same place in " + TM.year + ". Drag the year slider, or switch on Before/after.", "ok"); } }));
+  card.appendChild(btn("Before/after: OFF", b => { TM.cmp = !TM.cmp; b.textContent = "Before/after: " + (TM.cmp ? "ON" : "OFF"); sp.style.display = TM.cmp ? "" : "none"; }));
+  card.appendChild(rng(2000, Y0, TM.year, 1, v => { TM.year = v; tmL.clear(); setTm(); })); card.appendChild(tmLab); setTm();
+  card.appendChild(btn("Flood what-if: OFF", b => { FL.on = !FL.on; b.textContent = "Flood what-if: " + (FL.on ? "ON" : "OFF"); fl.textContent = ""; if (FL.on) { SAT.on = true; if (SAT.h > 0.05) zT = Math.min(zT, 1.02); } }));
+  const fl = lab(""); card.appendChild(rng(0, 10, 0, 0.5, v => { FL.extra = v; })); card.appendChild(fl);
+  card.appendChild(lab("Relief x")); card.appendChild(rng(1, 8, 3, 0.5, v => { SAT.ex = v; SAT.exDirty = true; }));
+  card.appendChild(lab("Tilt")); card.appendChild(rng(0, 65, 0, 1, v => { SAT.tilt = v * D2R; }));
+  const sp = document.createElement("div"); sp.style.cssText = "position:absolute;top:0;bottom:0;width:22px;margin-left:-11px;z-index:5;cursor:ew-resize;touch-action:none;display:none;background:linear-gradient(90deg,transparent 10px,#fff 10px,#fff 12px,transparent 12px)";
+  sp.style.left = "50%"; $("stage").appendChild(sp);
+  sp.onpointerdown = e => { sp.setPointerCapture(e.pointerId); e.stopPropagation(); }; sp.onpointermove = e => { if (!sp.hasPointerCapture(e.pointerId)) return; const r = el.getBoundingClientRect(); TM.split = Math.max(0.05, Math.min(0.95, (e.clientX - r.left) / r.width)); sp.style.left = TM.split * 100 + "%"; };
+  setInterval(() => { if (FL.on) { const m = Math.round((rise + FL.extra) * 10) / 10; fl.textContent = "+" + m + " m (" + model(S.sc, S.year).sl.toFixed(2) + " m SLR by " + S.year + " + " + FL.extra + " what-if)"; } }, 400);
+
+  /* share link + report + data trust */
+  const view = () => { _v0.set(0, 0, 1).applyQuaternion(_q0.copy(earth.quaternion).invert()); return {la: Math.asin(Math.max(-1, Math.min(1, _v0.y))) / D2R, lo: Math.atan2(-_v0.z, _v0.x) / D2R}; };
+  const _v0 = new THREE.Vector3(), _q0 = new THREE.Quaternion();
+  const link = () => { const c = view(); return location.href.split("#")[0] + "#v=" + [c.la.toFixed(5), c.lo.toFixed(5), (zT - 1).toPrecision(4), S.year, S.sc, Math.round(SAT.tilt / D2R), TM.on ? TM.year : 0, FL.on ? FL.extra : -1, SAT.ex].join(","); };
+  card.appendChild(btn("Share link", b => { const u = link(), done = () => { b.textContent = "Link copied"; setTimeout(() => b.textContent = "Share link", 1800); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(u).then(done, () => prompt("Copy this link", u)); else prompt("Copy this link", u); }));
+  card.appendChild(btn("Export report", () => { const c = view(), m = model(S.sc, S.year), gi = $("geoInfo").innerText || "", esc = s => String(s).replace(/[&<>]/g, x => ({"&": "&amp;", "<": "&lt;", ">": "&gt;"}[x]));
+    const html = "<!doctype html><meta charset=utf-8><title>ECOSPHERE-4D site report</title><body style='font:16px/1.5 system-ui;max-width:720px;margin:24px auto;padding:0 16px'><h1>ECOSPHERE-4D site report</h1><p>Generated " + new Date().toISOString() + "</p><h2>Location</h2><p>" + c.la.toFixed(4) + ", " + c.lo.toFixed(4) + "</p><pre style='white-space:pre-wrap'>" + esc(gi) +
+      "</pre><h2>Scenario</h2><p>" + esc(SC[S.sc].name) + ", year " + S.year + ": +" + m.temp.toFixed(2) + " C global warming, sea level +" + m.sl.toFixed(2) + " m" + (FL.on ? ", flood what-if shown with +" + FL.extra + " m extra" : "") + ".</p><h2>Open this exact view</h2><p><a href='" + link() + "'>" + esc(link()) + "</a></p>" +
+      "<h2>Sources and limits</h2><ul><li>Imagery: Esri World Imagery (mixed dates); NASA GIBS MODIS Terra 250 m</li><li>Elevation: Terrarium tiles (AWS Open Data), vertical error typically several metres</li><li>Projections: IPCC AR6 pathways; flood layer is a simple bathtub model without tides, storm surge, defences or flow paths</li><li>Weather and air quality: Open-Meteo; temperature trend: NASA POWER</li></ul></body>";
+    const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([html], {type: "text/html"})); a.download = "ecosphere4d-report.html"; a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 4000); log("Report exported.", "ok"); }));
+  const dt = document.createElement("div"); dt.style.cssText = "display:none;position:fixed;inset:0;z-index:99999;background:#000c;overflow:auto;padding:16px";
+  dt.innerHTML = "<div style='max-width:760px;margin:auto;background:#031a30;border:1px solid #18c8ff;border-radius:10px;padding:14px 16px;color:#cfeaff;font:14px/1.45 Rajdhani,sans-serif'><h2 style='margin:0 0 8px;color:#6fe3ff'>Data trust</h2>" +
+    "<p>Every number here comes from a named source. This is what each one can and cannot tell you.</p><table style='width:100%;border-collapse:collapse;font-size:13px'>" +
+    [["Satellite photos", "Esri World Imagery", "0.3 to 10 m", "Mixed capture dates, can be years old; not live"],
+     ["Time machine", "NASA GIBS, MODIS Terra", "250 m", "One mid-July image per year; clouds and gaps possible; 2000 onwards"],
+     ["Elevation / relief", "Terrarium tiles (public DEMs)", "about 10 to 30 m", "Vertical error typically 2 to 10 m, worse in cities and forests; relief is exaggerated on purpose"],
+     ["Sea level rise", "IPCC AR6 pathways", "global mean", "Likely ranges only; ice-sheet processes add deep uncertainty; local land sinking not included"],
+     ["Flood what-if", "Elevation vs projected rise", "per DEM pixel", "Bathtub model: ignores tides, storm surge, defences, drainage and whether water can actually reach a spot. Bands under 1 to 2 m are indicative only"],
+     ["Air quality, weather", "Open-Meteo (CAMS, weather models)", "about 10 km", "Model values, not a street sensor"],
+     ["Temperature trend", "NASA POWER", "about 50 km", "Reanalysis, smooths local extremes"]].map(r => "<tr>" + r.map((c, i) => "<td style='border-top:1px solid #18c8ff44;padding:5px 6px;vertical-align:top" + (i === 0 ? ";color:#6fe3ff;white-space:nowrap" : "") + "'>" + c + "</td>").join("") + "</tr>").join("") + "</table></div>";
+  dt.onclick = () => dt.style.display = "none"; document.body.appendChild(dt);
+  card.appendChild(btn("Data trust", () => dt.style.display = "block"));
+  par.insertBefore(card, $("geoInfo"));
+
+  /* open a shared link */
+  const mh = /#v=([^&]+)/.exec(location.hash);
+  if (mh) setTimeout(() => { const a = mh[1].split(",").map(Number); if (a.length < 9 || a.some(isNaN)) return; focus(a[0], a[1], true); zT = 1 + Math.max(HMIN, Math.min(6, a[2])); S.year = Math.max(Y0, Math.min(2100, a[3])); S.sc = decodeURIComponent(mh[1].split(",")[4]) in SC ? mh[1].split(",")[4] : S.sc;
+    SAT.tilt = a[5] * D2R; if (a[6]) { TM.on = true; TM.year = a[6]; } if (a[7] >= 0) { FL.on = true; FL.extra = a[7]; } SAT.ex = a[8]; update(); log("Opened a shared view.", "ok"); }, 900);
 })();
 
 I18N.start();
