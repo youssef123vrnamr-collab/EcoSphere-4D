@@ -93,7 +93,8 @@ On a phone you can add ECOSPHERE-4D to your home screen from the browser menu. I
 |---|---|
 | `index.html` | The whole app: globe, simulation, terminal and styles |
 | `manifest.webmanifest` | App name, colours and icons for the home-screen install |
-| `icons/` | The ECOSPHERE-4D logo as app icons |
+| `icon-*.png`, `apple-touch-icon.png` | The ECOSPHERE-4D logo as app icons |
+| `sw.js` | Tiny service worker that makes the app installable |
 | `README.md` | This file |
 
 ---
