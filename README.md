@@ -42,7 +42,9 @@ A table lists every layer, where it comes from, how sharp it is and what it can 
 
 - **NASA GIBS** satellite layers: true colour, land surface temperature, vegetation (NDVI) and sea surface temperature. GIBS MODIS images also power the time machine.
 - **NASA POWER** temperature history from 1990 for any place you pick, with the trend per decade.
-- **NASA EONET** active storms and wildfires, marked on the globe, with storm tracks and reported wind speed.
+- **NASA EONET** active storms, wildfires and volcanoes, marked on the globe, with observed storm tracks and reported wind speed.
+- **NOAA NHC and JTWC** official storm positions and forecast tracks (through the Esri "Active Hurricanes" live feed). Where an official forecast exists, storms follow it.
+- **USGS** tsunami-flagged earthquakes from the last week.
 - **Open-Meteo** live wind at three heights, humidity, clouds, sea surface temperature and ocean currents. The simulation clock starts at the real UTC time.
 - **Esri World Imagery** for the sharp satellite photos at deep zoom.
 - **Terrarium elevation tiles** (AWS Open Data) for relief and the flood layer.
@@ -50,11 +52,11 @@ A table lists every layer, where it comes from, how sharp it is and what it can 
 
 ## The storm simulation
 
-I did not place any storm by hand. A storm can only form where the live data allows it: warm ocean (26.5 °C or more), cyclonic spin in the low levels, low wind shear, moist air higher up, enough distance from the equator, plus a nudge from where storms formed in the past (NASA EONET archive). New storms start weak and spin up slowly. Each parcel of air is carried by the real wind plus the storm's own vortex, so the shape comes from the physics and not from a fixed drawing. Storms also push back on the planet: they thicken the clouds around them, leave a cold wake in the sea and shove the ocean currents with their winds.
+I did not place any storm by hand. In the live view, only storms that really exist are shown: each one sits at its last official report, and a storm whose last report is more than 48 hours old is hidden instead of being shown as active (storms older than 30 hours are marked as aging in the terminal). Storms without an official forecast follow their observed track plus up to 24 hours of its real motion. When you move into the future or run the time-lapse, the simulation can form new storms. A simulated storm can only form where the live data allows it: warm ocean (26.5 °C or more), cyclonic spin in the low levels, low wind shear, moist air higher up, enough distance from the equator, plus a nudge from where storms formed in the past (NASA EONET archive). New storms start weak and spin up slowly. Each parcel of air is carried by the real wind plus the storm's own vortex, so the shape comes from the physics and not from a fixed drawing. Storms also push back on the planet: they thicken the clouds around them, leave a cold wake in the sea and add their winds to the ocean-current drift. Around each storm centre the water shows rotating foam bands and outgoing swell rings. This is a visual aid: its size follows the storm's wind, and it is dimmed when the last report is old.
 
 ## Projections
 
-There are three emissions scenarios, SSP1-2.6, SSP2-4.5 and SSP5-8.5, up to 2100. Warming, Arctic ice loss, sea level, CO₂ and vegetation change all show on the globe. This is a simple model tuned to IPCC AR6 trends. It is meant for exploring and is not an official forecast.
+There are five emissions scenarios, from SSP1-1.9 to SSP5-8.5, up to 2100. Warming, Arctic ice loss, sea level, CO₂ and vegetation change all show on the globe. This is a simple model tuned to IPCC AR6 trends. It is meant for exploring and is not an official forecast.
 
 ## Command center
 
@@ -65,6 +67,8 @@ There is a small terminal for quick control and a short written analysis. You ca
 ## Using it
 
 It is a single HTML file, so there is nothing to install. Use a modern browser with an internet connection.
+
+On start, a loading screen lists each live data feed and opens the globe once they are all ready. If a feed cannot be reached because of the connection, it asks you to check your internet connection and retry. After 15 seconds you can continue anyway and the remaining layers finish loading in the background.
 
 - Drag to rotate, scroll or pinch to zoom, click or tap the globe to lock a spot.
 - Type a place in **Target region** (for example `Cairo`) for its live weather and NASA temperature trend.
@@ -110,6 +114,8 @@ I would rather be upfront about these.
 - Elevation data is off by several metres in places, more in cities and forests. The relief is exaggerated on purpose.
 - The flood layer is a simple bathtub model. It ignores tides, storm surge, sea defences and drainage, and it does not check whether water can actually reach a spot. It also only shows land above today's sea level. Treat anything under 1 to 2 m as a rough hint.
 - If a data source is down, the terminal tells you, and the globe falls back to its normal textures.
+- All live data comes from free public services. They can be slow or limit requests at busy moments, so a layer may load late or be missing.
+- Storm positions and winds are the last official report, not an estimate for this minute. The terminal command `storms` lists each report with its age.
 
 ---
 
