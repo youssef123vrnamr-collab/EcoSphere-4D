@@ -149,6 +149,7 @@ window.__splashFail=function(name,m){if(!done)fails[name]=String(m||"")};
 function showErr(net,name){
   box.hidden=false;bR.hidden=false;bG.hidden=net&&(performance.now()-T0<15000);
   msg.innerHTML=net?"<b>No connection to the data services</b>Check your internet connection and try again.":"<b>Data service unavailable</b>"+name+" is not responding right now. Please try again in a moment.";
+  var d=name&&fails[name];if(d){var sm=document.createElement("small");sm.style.cssText="display:block;opacity:.6;margin-top:6px;font-size:11px";sm.textContent=name+": "+d;msg.appendChild(sm)}
   st.textContent=net?"Waiting for connection":"Service unavailable";
 }
 bR.onclick=function(){fails={};box.hidden=true;T0=performance.now();
@@ -756,7 +757,7 @@ async function loadEvents() {
   try { await loadNHC(); } catch (er) { log("NOAA NHC official tracks unavailable: " + er.message + " (storms use the observed NASA EONET track).", "warn"); } try { await loadGlobalTC(); } catch (er) { log("Global storm feed (NHC + JTWC) unavailable: " + er.message, "warn"); } finishTracks(); const nStale = pruneStale(); nStorms = realStorms.length; rebuildCyclones(true); loadLocalWind().catch(er => log("Real wind fields unavailable: " + er.message, "warn")); if (window.ecoVolcanoes) window.ecoVolcanoes(vcs);
   log("NASA EONET: " + realStorms.length + " active storm(s)" + (nStale ? " (" + nStale + " outdated hidden)" : "") + " and " + fires + " wildfire(s) and " + vcs.length + " volcano(es) marked on the globe (the storm itself is the spinning vortex carried by real wind, placed at its real position; cyan line = official forecast track, orange dots = fires, red cones with glowing plume = volcanoes).", "warn");
   vcs.slice(0, 5).forEach(v => log("Volcano: " + v.name, "warn"));
-  storms.slice(0, 6).forEach(s => log("Storm: " + s, "warn"));
+  storms.filter(s => realStorms.some(r => s.startsWith(r.name))).slice(0, 6).forEach(s => log("Storm: " + s, "warn"));
 }
 /* ---- real storm tracks: NOAA NHC official forecast + NASA EONET observed track. Real storms follow these tracks, not simulated wind ---- */
 const T_BOOT = Date.now(); let LOOP_H = 72, realLive = true; /* realLive: real storms sit at their real position now (wall clock) and follow the live data; off = time-lapse of the forecast */
