@@ -97,7 +97,17 @@ header nav button{padding:5px 10px;font-size:14px}
 #splash .wm span{color:#18c8ff}
 #splash .tg{font:600 clamp(10px,2.4vw,13px) Orbitron,sans-serif;letter-spacing:.34em;color:#ffd24d;animation:spUp .9s .8s both;text-indent:.34em}
 #splash .bar{width:min(54vw,240px);height:3px;background:#18c8ff22;border-radius:3px;overflow:hidden;margin-top:10px;animation:spUp .6s 1s both}
-#splash .bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffd24d,#18c8ff);animation:spBar 1.7s 1s ease-in-out forwards}
+#splash .bar i{display:block;height:100%;width:4%;background:linear-gradient(90deg,#ffd24d,#18c8ff);transition:width .5s ease}
+#spStat{font:600 clamp(11px,3vw,14px) Orbitron,sans-serif;letter-spacing:.12em;color:#9fe9ff;text-align:center;min-height:1.4em;padding:0 16px;animation:spUp .6s 1s both}
+#spList{list-style:none;margin:0;padding:0;font:12px/1.9 Orbitron,sans-serif;color:#6f8fa3;letter-spacing:.06em;animation:spUp .6s 1.1s both}
+#spList li i{display:inline-block;width:8px;height:8px;border-radius:50%;background:#3a4d63;margin-right:10px}
+#spList li.ok{color:#c8f7e6}#spList li.ok i{background:#37f0a0;box-shadow:0 0 8px #37f0a0}
+#spList li.ld i{background:#18c8ff;animation:spBlink 1s infinite}
+@keyframes spBlink{50%{opacity:.25}}
+#spErr{max-width:min(86vw,360px);text-align:center;color:#ffd9a0;font:14px/1.5 system-ui,sans-serif}
+#spErr[hidden]{display:none}
+#spErr b{display:block;color:#fff;font:700 15px system-ui,sans-serif;margin-bottom:2px}
+#spErr button{font:600 12px Orbitron,sans-serif;letter-spacing:.1em;color:#e8fbff;background:#0b2a4a;border:1px solid #18c8ff;border-radius:8px;padding:10px 16px;margin:10px 6px 0}
 @keyframes spIn{from{opacity:0;transform:scale(.7) rotate(-12deg)}to{opacity:1;transform:none}}
 @keyframes spDraw{to{stroke-dashoffset:0}}
 @keyframes spUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
@@ -127,8 +137,38 @@ body.cinema #dir p{font-size:18px}
 </head>
 <body>
 <script>if("serviceWorker"in navigator&&location.protocol==="https:")window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){})})</script>
-<div id="splash" role="img" aria-label="ECOSPHERE-4D"><div class="lg"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" ><defs><radialGradient id="gs" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#7defff"/><stop offset=".45" stop-color="#1a8fe0"/><stop offset="1" stop-color="#06285a"/></radialGradient><linearGradient id="rs" x1="0" x2="1"><stop offset="0" stop-color="#ffd24d"/><stop offset="1" stop-color="#18c8ff"/></linearGradient><clipPath id="cs"><circle cx="100" cy="100" r="60"/></clipPath></defs><g transform="rotate(-24 100 100)"><path class="orb" d="M8 100A92 30 0 0 1 192 100" fill="none" stroke="url(#rs)" stroke-width="3" stroke-linecap="round" opacity=".55"/></g><circle cx="100" cy="100" r="60" fill="url(#gs)"/><g clip-path="url(#cs)" fill="none" stroke="#d8fbff" stroke-opacity=".5" stroke-width="1.4"><ellipse cx="100" cy="100" rx="26" ry="60"/><ellipse cx="100" cy="100" rx="48" ry="60"/><path d="M40 100H160M48 74H152M48 126H152M64 52H136M64 148H136"/><path d="M62 88c14-12 26-4 34-12s6-14 20-10 18 16 8 24-18 2-22 12-18 14-26 6-4-14-14-20z" fill="#5be3a5" stroke="none" opacity=".55"/></g><circle cx="100" cy="100" r="60" fill="none" stroke="#bff4ff" stroke-opacity=".6" stroke-width="1.5"/><g transform="rotate(-24 100 100)"><path class="orb" d="M8 100A92 30 0 0 0 192 100" fill="none" stroke="url(#rs)" stroke-width="4" stroke-linecap="round"/><circle class="sat" cx="100" cy="130" r="6.5" fill="#ffd24d"/><circle cx="100" cy="130" r="11" fill="none" stroke="#ffd24d" stroke-opacity=".5"/></g></svg></div><div class="wm">ECOSPHERE<span>-4D</span></div><div class="tg">EARTH IN FOUR DIMENSIONS</div><div class="bar"><i></i></div></div>
-<script>(function(){var t0=performance.now(),sp=document.getElementById("splash"),done=false;function go(){if(done)return;done=true;sp.classList.add("off");setTimeout(function(){sp.remove()},800)}sp.onclick=go;window.addEventListener("load",function(){setTimeout(go,Math.max(300,3000-(performance.now()-t0)))});setTimeout(go,9000)})()</script>
+<div id="splash" role="img" aria-label="ECOSPHERE-4D"><div class="lg"><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" ><defs><radialGradient id="gs" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#7defff"/><stop offset=".45" stop-color="#1a8fe0"/><stop offset="1" stop-color="#06285a"/></radialGradient><linearGradient id="rs" x1="0" x2="1"><stop offset="0" stop-color="#ffd24d"/><stop offset="1" stop-color="#18c8ff"/></linearGradient><clipPath id="cs"><circle cx="100" cy="100" r="60"/></clipPath></defs><g transform="rotate(-24 100 100)"><path class="orb" d="M8 100A92 30 0 0 1 192 100" fill="none" stroke="url(#rs)" stroke-width="3" stroke-linecap="round" opacity=".55"/></g><circle cx="100" cy="100" r="60" fill="url(#gs)"/><g clip-path="url(#cs)" fill="none" stroke="#d8fbff" stroke-opacity=".5" stroke-width="1.4"><ellipse cx="100" cy="100" rx="26" ry="60"/><ellipse cx="100" cy="100" rx="48" ry="60"/><path d="M40 100H160M48 74H152M48 126H152M64 52H136M64 148H136"/><path d="M62 88c14-12 26-4 34-12s6-14 20-10 18 16 8 24-18 2-22 12-18 14-26 6-4-14-14-20z" fill="#5be3a5" stroke="none" opacity=".55"/></g><circle cx="100" cy="100" r="60" fill="none" stroke="#bff4ff" stroke-opacity=".6" stroke-width="1.5"/><g transform="rotate(-24 100 100)"><path class="orb" d="M8 100A92 30 0 0 0 192 100" fill="none" stroke="url(#rs)" stroke-width="4" stroke-linecap="round"/><circle class="sat" cx="100" cy="130" r="6.5" fill="#ffd24d"/><circle cx="100" cy="130" r="11" fill="none" stroke="#ffd24d" stroke-opacity=".5"/></g></svg></div><div class="wm">ECOSPHERE<span>-4D</span></div><div class="tg">EARTH IN FOUR DIMENSIONS</div><div class="bar"><i></i></div><div id="spStat">Starting…</div><ul id="spList"></ul><div id="spErr" hidden><p id="spMsg"></p><button id="spRetry">Retry</button><button id="spGo" hidden>Continue anyway</button></div></div>
+<script>(function(){
+var sp=document.getElementById("splash"),done=false,fails={},t0=performance.now(),T0=t0,shown=false;
+var IDX=[0,2,3,4,5],NAMES={0:"NASA GIBS satellite imagery",2:"NASA EONET storm events",3:"Wind and cloud field",4:"Sea-surface temperature",5:"Ocean currents"};
+var st=document.getElementById("spStat"),ul=document.getElementById("spList"),bar=sp.querySelector(".bar i"),box=document.getElementById("spErr"),msg=document.getElementById("spMsg"),bR=document.getElementById("spRetry"),bG=document.getElementById("spGo");
+var lis=IDX.map(function(i){var li=document.createElement("li");li.innerHTML="<i></i>"+NAMES[i];ul.appendChild(li);return li});
+var NET=/timeout|failed to fetch|network|load failed|fetch|offline/i;
+function go(){if(done)return;done=true;clearInterval(tm);sp.classList.add("off");setTimeout(function(){sp.remove()},800)}
+window.__splashFail=function(name,m){if(!done)fails[name]=String(m||"")};
+function showErr(net,name){
+  box.hidden=false;bR.hidden=false;bG.hidden=net&&(performance.now()-T0<15000);
+  msg.innerHTML=net?"<b>No connection to the data services</b>Check your internet connection and try again.":"<b>Data service unavailable</b>"+name+" is not responding right now. Please try again in a moment.";
+  st.textContent=net?"Waiting for connection":"Service unavailable";
+}
+bR.onclick=function(){fails={};box.hidden=true;T0=performance.now();
+  var r=window.__ecoReady?window.__ecoReady():[];var miss=IDX.filter(function(i){return !r[i]});
+  if(miss.length===1&&miss[0]===0)location.reload();else if(window.__ecoRetry)window.__ecoRetry()};
+bG.onclick=go;
+function tick(){
+  var r=window.__ecoReady?window.__ecoReady():null,n=0,first=-1;
+  IDX.forEach(function(i,k){var ok=!!(r&&r[i]);if(ok)n++;else if(first<0)first=i;lis[k].className=ok?"ok":"ld"});
+  bar.style.width=(4+96*n/IDX.length)+"%";
+  var fk=Object.keys(fails),now=performance.now();
+  if(n===IDX.length){st.textContent="Ready";box.hidden=true;if(now-t0>2200)go();return}
+  if(!navigator.onLine){showErr(true);return}
+  if(fk.length){var net=fk.some(function(k){return NET.test(fails[k])});showErr(net,fk[0]);return}
+  if(now-T0>90000){showErr(true);return}
+  if(now-T0>15000){box.hidden=false;bR.hidden=true;bG.hidden=false;msg.innerHTML="<b>Still loading live data</b>You can keep waiting, or continue now and the remaining layers will finish in the background."}else box.hidden=true;
+  st.textContent=r&&first>=0?"Loading "+NAMES[first]+"…":"Initializing…";
+}
+var tm=setInterval(tick,300);
+})()</script>
 <header><h1><svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" style="height:1.15em;width:1.15em;vertical-align:-.22em;margin-right:.4em"><defs><radialGradient id="gh" cx="38%" cy="32%" r="75%"><stop offset="0" stop-color="#7defff"/><stop offset=".45" stop-color="#1a8fe0"/><stop offset="1" stop-color="#06285a"/></radialGradient><linearGradient id="rh" x1="0" x2="1"><stop offset="0" stop-color="#ffd24d"/><stop offset="1" stop-color="#18c8ff"/></linearGradient><clipPath id="ch"><circle cx="100" cy="100" r="60"/></clipPath></defs><g transform="rotate(-24 100 100)"><path class="orb" d="M8 100A92 30 0 0 1 192 100" fill="none" stroke="url(#rh)" stroke-width="3" stroke-linecap="round" opacity=".55"/></g><circle cx="100" cy="100" r="60" fill="url(#gh)"/><g clip-path="url(#ch)" fill="none" stroke="#d8fbff" stroke-opacity=".5" stroke-width="1.4"><ellipse cx="100" cy="100" rx="26" ry="60"/><ellipse cx="100" cy="100" rx="48" ry="60"/><path d="M40 100H160M48 74H152M48 126H152M64 52H136M64 148H136"/><path d="M62 88c14-12 26-4 34-12s6-14 20-10 18 16 8 24-18 2-22 12-18 14-26 6-4-14-14-20z" fill="#5be3a5" stroke="none" opacity=".55"/></g><circle cx="100" cy="100" r="60" fill="none" stroke="#bff4ff" stroke-opacity=".6" stroke-width="1.5"/><g transform="rotate(-24 100 100)"><path class="orb" d="M8 100A92 30 0 0 0 192 100" fill="none" stroke="url(#rh)" stroke-width="4" stroke-linecap="round"/><circle class="sat" cx="100" cy="130" r="6.5" fill="#ffd24d"/><circle cx="100" cy="130" r="11" fill="none" stroke="#ffd24d" stroke-opacity=".5"/></g></svg>ECOSPHERE-4D</h1><span>NASA Space Apps 2026 &middot; Observe, simulate and project the Earth in 4D</span><nav id="nav" aria-label="Screens"><button id="nStory">Guided tour</button><button id="nCmp">Compare</button><button id="nSci">Science</button><button id="nRep">Report</button><button id="nSrc">Sources</button><button id="nAbout">About</button><button id="nCin">Cinema &#9654;</button></nav></header>
 <main>
 <section class="box" id="stage" aria-label="Interactive 3D Earth">
@@ -315,8 +355,8 @@ function log(text, cls = "info") {
   d.append(t, m); logEl.appendChild(d); logEl.scrollTop = logEl.scrollHeight;
 }
 async function stream(lines, delay = 260) { for (const [t, c] of lines) { log(t, c || "info"); await sleep(delay); } }
-const getJSON = async (u, tries = 2) => { /* weak connection: 25 s timeout per try and one automatic retry, so a stalled request ends with a clear error instead of hanging forever */
-  for (let i = 0; ; i++) { const ac = new AbortController(), to = setTimeout(() => ac.abort(), 25000);
+const getJSON = async (u, tries = 2) => { /* weak connection: 75 s timeout per try and one automatic retry, so a stalled request ends with a clear error instead of hanging forever */
+  for (let i = 0; ; i++) { const ac = new AbortController(), to = setTimeout(() => ac.abort(), 75000);
     try { const r = await fetch(u, {signal: ac.signal}); if (!r.ok) throw new Error("HTTP " + r.status); return await r.json(); }
     catch (e) { if (i >= tries - 1) throw new Error(e && e.name === "AbortError" ? "timeout (weak connection)" : (e && e.message) || "network error"); await new Promise(r => setTimeout(r, 800)); }
     finally { clearTimeout(to); } } };
@@ -878,7 +918,7 @@ function stormCheck() { /* verification: for every real storm, the real numbers 
 }
 async function refreshAll() {
   await Promise.all([["wind and cloud field", loadAtmos], ["sea surface temperature", loadSST], ["NASA EONET events", loadEvents]]
-    .map(async ([n, f]) => { try { await f(); } catch (e) { log("Live " + n + " unavailable: " + e.message, "err"); } }));
+    .map(async ([n, f]) => { try { await f(); } catch (e) { log("Live " + n + " unavailable: " + e.message, "err"); if (window.__splashFail) window.__splashFail(n, e.message); } }));
   if (!window.__scDone) { window.__scDone = 1; try { stormCheck(); } catch (e) { log("Storm check failed: " + e.message, "err"); } }
 }
 setInterval(refreshAll, 600000); /* real storm positions re-read every 10 min */
@@ -1271,7 +1311,7 @@ let windOn = true, oceanOn = true, cycOn = true, paused = false, lastYC = null, 
   if (!reduce && !paused) { const dv = Math.min(0.3, dt * simSpeed); if (windOn) stepFlow(windF, dv); if (oceanOn && OC.n) stepFlow(oceanF, dv); if (cycOn) stepCyc(dt); }
   requestAnimationFrame(flowLoop);
 })();
-loadCurrents().catch(e => log("Ocean currents unavailable: " + e.message, "err"));
+loadCurrents().catch(e => { log("Ocean currents unavailable: " + e.message, "err"); if (window.__splashFail) window.__splashFail("Ocean currents", e.message); });
 setInterval(() => loadCurrents().catch(() => {}), 1800000);
 loadHistory().catch(e => log("Storm history unavailable: " + e.message + " (genesis uses live physics only).", "warn"));
 
@@ -1345,6 +1385,7 @@ loadHistory().catch(e => log("Storm history unavailable: " + e.message + " (gene
     ["Sea-surface temperature", () => !!sst, "Open-Meteo Marine grid"],
     ["Ocean currents", () => OC.n > 0, "Open-Meteo Marine grid"]
   ];
+  window.__ecoReady = () => FEEDS.map(([n, f]) => { try { return !!f(); } catch (e) { return false; } });
   const feedsHTML = () => FEEDS.map(([n, f, h]) => '<span title="' + esc(h) + '"><i class="dot' + (f() ? " on" : "") + '"></i>' + esc(n) + "</span>").join("");
   const paintFeeds = () => { const h = feedsHTML(); ["inFeeds", "feeds"].forEach(id => { const e = $(id); if (e) e.innerHTML = h; }); };
   setInterval(paintFeeds, 1500);
@@ -2237,6 +2278,7 @@ loadHistory().catch(e => log("Storm history unavailable: " + e.message + " (gene
 
 I18N.start();
 
+window.__ecoRetry = () => { refreshAll(); loadCurrents().catch(e => { if (window.__splashFail) window.__splashFail("Ocean currents", e.message); }); };
 refreshAll();
 stream([
   ["EcoSphere-4D online. Analyst: built-in (no API key needed).", "ok"],
