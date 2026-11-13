@@ -315,7 +315,11 @@ function log(text, cls = "info") {
   d.append(t, m); logEl.appendChild(d); logEl.scrollTop = logEl.scrollHeight;
 }
 async function stream(lines, delay = 260) { for (const [t, c] of lines) { log(t, c || "info"); await sleep(delay); } }
-const getJSON = async u => { const r = await fetch(u); if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); };
+const getJSON = async (u, tries = 2) => { /* weak connection: 25 s timeout per try and one automatic retry, so a stalled request ends with a clear error instead of hanging forever */
+  for (let i = 0; ; i++) { const ac = new AbortController(), to = setTimeout(() => ac.abort(), 25000);
+    try { const r = await fetch(u, {signal: ac.signal}); if (!r.ok) throw new Error("HTTP " + r.status); return await r.json(); }
+    catch (e) { if (i >= tries - 1) throw new Error(e && e.name === "AbortError" ? "timeout (weak connection)" : (e && e.message) || "network error"); await new Promise(r => setTimeout(r, 800)); }
+    finally { clearTimeout(to); } } };
 
 /* ---------- Scene ---------- */
 const stage = $("stage");
@@ -1850,6 +1854,39 @@ loadHistory().catch(e => log("Storm history unavailable: " + e.message + " (gene
   let lastTr = 0, loopLogged = false;
   function setSeg(A, k, a, b) { A[k] = a.x; A[k + 1] = a.y; A[k + 2] = a.z; A[k + 3] = b.x; A[k + 4] = b.y; A[k + 5] = b.z; return k + 6; }
   const eyes = [], _Zv = new THREE.Vector3(0, 0, 1);
+  /* ---------- sea-surface storm effect: rotating spiral foam bands + outgoing swell rings on the water around each storm (visual aid; size/strength follow the storm's wind, dimmed when the last report is old) ---------- */
+  const seaFx = (() => {
+    const mkTex = draw => { const cv = document.createElement("canvas"); cv.width = cv.height = 256; draw(cv.getContext("2d")); return new THREE.CanvasTexture(cv); };
+    const spiralTex = mkTex(g => {
+      g.translate(128, 128); g.lineCap = "round";
+      const gr = g.createRadialGradient(0, 0, 8, 0, 0, 126); gr.addColorStop(0, "rgba(190,230,255,0)"); gr.addColorStop(0.35, "rgba(190,230,255,0.16)"); gr.addColorStop(1, "rgba(190,230,255,0)");
+      g.fillStyle = gr; g.beginPath(); g.arc(0, 0, 126, 0, 6.2832); g.fill();
+      for (let arm = 0; arm < 5; arm++) for (let i = 0; i < 64; i++) {
+        const f0 = i / 64, f1 = (i + 1) / 64, r0 = 0.12 + 0.86 * f0, r1 = 0.12 + 0.86 * f1, t0 = arm * 1.2566 + f0 * 3.6, t1 = arm * 1.2566 + f1 * 3.6;
+        g.strokeStyle = "rgba(235,248,255," + (0.8 * Math.pow(1 - f0, 0.9)).toFixed(3) + ")"; g.lineWidth = 1.5 + 7 * (1 - f0);
+        g.beginPath(); g.moveTo(Math.cos(t0) * r0 * 126, Math.sin(t0) * r0 * 126); g.lineTo(Math.cos(t1) * r1 * 126, Math.sin(t1) * r1 * 126); g.stroke();
+      }
+    });
+    const ringTex = mkTex(g => { g.translate(128, 128); const gr = g.createRadialGradient(0, 0, 100, 0, 0, 126); gr.addColorStop(0, "rgba(220,245,255,0)"); gr.addColorStop(0.6, "rgba(220,245,255,0.75)"); gr.addColorStop(1, "rgba(220,245,255,0)"); g.fillStyle = gr; g.beginPath(); g.arc(0, 0, 126, 0, 6.2832); g.fill(); });
+    const geo = new THREE.PlaneGeometry(2, 2), grp = new THREE.Group(); earth.add(grp);
+    const mat = t => new THREE.MeshBasicMaterial({map: t, transparent: true, depthWrite: false, side: THREE.DoubleSide});
+    const fx = new Map(), _Z = new THREE.Vector3(0, 0, 1);
+    function update(tm) {
+      const seen = new Set();
+      if (typeof cycOn === "undefined" || cycOn) for (const c of cycList) {
+        if (!c.n || c.onLand) continue;
+        let e = fx.get(c);
+        if (!e) { e = {g: new THREE.Group(), sp: new THREE.Mesh(geo, mat(spiralTex)), r1: new THREE.Mesh(geo, mat(ringTex)), r2: new THREE.Mesh(geo, mat(ringTex))}; [e.sp, e.r1, e.r2].forEach(m => { m.renderOrder = 2; e.g.add(m); }); grp.add(e.g); fx.set(c, e); }
+        seen.add(c);
+        const V = Math.max(15, c.V || 0), R = Math.min(0.1, 0.018 + 0.0011 * V), dir = c.lat < 0 ? -1 : 1, age = c.src && isFinite(c.src.ageH) ? c.src.ageH : 0, dim = age > 30 ? 0.5 : 1, st = Math.min(1, V / 50);
+        e.g.position.copy(toVec(c.lat, c.lon, 1.0135)); e.g.quaternion.setFromUnitVectors(_Z, c.n);
+        e.sp.scale.set(R * dir, R, 1); e.sp.rotation.z = dir * tm * 0.45; e.sp.material.opacity = (0.35 + 0.5 * st) * dim;
+        [e.r1, e.r2].forEach((m, i) => { const ph = (tm * 0.22 + i * 0.5) % 1; m.scale.set(R * (0.5 + 1.6 * ph), R * (0.5 + 1.6 * ph), 1); m.material.opacity = (1 - ph) * (0.25 + 0.4 * st) * dim; });
+      }
+      for (const [c, e] of fx) if (!seen.has(c)) { grp.remove(e.g); fx.delete(c); }
+    }
+    return {update};
+  })();
   function updStorms() {
     for (let k = eyes.length - 1; k >= 0; k--) { if (!realStorms.includes(eyes[k].userData.s)) { trailG.remove(eyes[k]); eyes.splice(k, 1); } else eyes[k].visible = false; }
     const now = performance.now(), doTrail = now - lastTr > 350; if (doTrail) lastTr = now;
@@ -1884,7 +1921,7 @@ loadHistory().catch(e => log("Storm history unavailable: " + e.message + " (gene
   (function evLoop() {
     const tm = performance.now() / 1000;
     if (volcs.length) updVolc(tm);
-    updStorms();
+    updStorms(); try { seaFx.update(tm); } catch (e) {}
     uni.tm.value = tm;
     if (tsuReplay) { tsuReplay.h = (performance.now() - tsuReplay.t0) / 1000 * 1.111; /* 4000x faster than real time */ if (tsuReplay.h > 33) stopReplay(); }
     updTsu(tm);
