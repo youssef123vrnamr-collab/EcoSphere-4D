@@ -339,11 +339,11 @@ const cycTex = mkTex(36, 8), atmTex = mkTex(24, 13), cycData = cycTex.image.data
 const uni = {
   map: {value: solid(20, 60, 130, 255)}, spec: {value: solid(0, 0, 0, 255)}, lights: {value: solid(0, 0, 0, 255)},
   live: {value: solid(0, 0, 0, 0)}, live2: {value: solid(0, 0, 0, 0)}, tc: {value: 0}, sun: {value: new THREE.Vector3(1, 0, 0)},
-  loss: {value: 0.2}, veg: {value: 0}, temp: {value: 1.3}, ov: {value: 0}, ovl: {value: 0}, sl: {value: 0.1}, la: {value: 0}, cy: {value: 0}, tm: {value: 0}, cyc: {value: cycTex}
+  loss: {value: 0.2}, veg: {value: 0}, temp: {value: 1.3}, ov: {value: 0}, ovl: {value: 0}, sl: {value: 0.1}, raw: {value: 1}, la: {value: 0}, cy: {value: 0}, tm: {value: 0}, cyc: {value: cycTex}
 };
 const VS = `varying vec2 vUv;varying vec3 vWN,vP;
 void main(){vUv=uv;vWN=normalize(mat3(modelMatrix)*normal);vec4 w=modelMatrix*vec4(position,1.);vP=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}`;
-const FS = `uniform sampler2D map,spec,lights,live,live2,cyc;uniform vec3 sun;uniform float loss,veg,temp,ov,ovl,sl,la,cy,tc,tm;
+const FS = `uniform sampler2D map,spec,lights,live,live2,cyc;uniform vec3 sun;uniform float loss,veg,temp,ov,ovl,sl,la,cy,tc,tm,raw;
 varying vec2 vUv;varying vec3 vWN,vP;
 vec3 ramp(float t){vec3 a=vec3(.05,.25,1.),b=vec3(.1,.95,1.),c=vec3(1.,.9,.2),d=vec3(1.,.15,.1);
  if(t<.33)return mix(a,b,t/.33);if(t<.66)return mix(b,c,(t-.33)/.33);return mix(c,d,(t-.66)/.34);}
@@ -366,19 +366,19 @@ void main(){
  float k=la*max(v1,v2);
  c=mix(c,mix(L2.rgb,L.rgb,v1),k);
  if(tc>.5){
-  c=mix(c,pow(mix(vec3(dot(c,vec3(.3,.59,.11))),c,1.2),vec3(1.12)),k);
+  c=mix(c,pow(mix(vec3(dot(c,vec3(.3,.59,.11))),c,1.2),vec3(1.12)),k*(1.-raw));
   float capNow=1.13;
   float mL=north*smoothstep(capNow,capNow+.04,lat)*(1.-smoothstep(capLat-.02,capLat+.02,lat))*smoothstep(.55,.75,min(c.r,min(c.g,c.b)));
-  c=mix(c,vec3(.03,.12,.3),mL*k);
-  c=mix(c,vec3(.1,.55,.15),max(veg,0.)*midLat*.5*land*k);
-  c=mix(c,vec3(.62,.45,.2),max(-veg,0.)*lowLat*.7*land*k);
-  c=mix(c,c*vec3(1.25,.85,.6)+vec3(.06,0.,0.),ovl*.8*k);
+  c=mix(c,vec3(.03,.12,.3),mL*k*(1.-raw));
+  c=mix(c,vec3(.1,.55,.15),max(veg,0.)*midLat*.5*land*k*(1.-raw));
+  c=mix(c,vec3(.62,.45,.2),max(-veg,0.)*lowLat*.7*land*k*(1.-raw));
+  c=mix(c,c*vec3(1.25,.85,.6)+vec3(.06,0.,0.),ovl*.8*k*(1.-raw));
   
  }
  float r=max(sl-.1,0.)*16.;float w=0.;
   if(r>.01){for(int i=0;i<16;i++){float a=float(i)*.392699,rr=r*(i<8?1.:.5);vec2 px=vec2(1./2048.,1./1024.)*rr;vec3 q=texture2D(map,vUv+vec2(cos(a)*px.x,sin(a)*px.y)).rgb;w=max(w,1.-smoothstep(-.02,.06,q.r-q.b*.8));}}
   vec3 wc=vec3(.05,.3,.62)+.07*sin(vUv.x*1400.+tm*2.1)*sin(vUv.y*900.-tm*1.6)+.05*sin((vUv.x+vUv.y)*2200.+tm*3.);
-  c=mix(c,wc,w*land*step(.01,r)*.9);
+  c=mix(c,wc,w*land*step(.01,r)*.9*(1.-raw*k));
   vec3 N=normalize(vWN),V=normalize(cameraPosition-vP);
  float d=dot(N,sun),day=smoothstep(-.12,.25,d);
  float lit=mix(.03+day*(.3+.8*max(d,0.)),.95,k*.6);
@@ -443,9 +443,13 @@ tex("earth_clouds_1024.png", null, "Cloud layer", t => { t.wrapS = THREE.RepeatW
 
 /* real-time sun: day/night terminator follows UTC */
 function sunLocal() {
-  const n = new Date(), h = n.getUTCHours() + n.getUTCMinutes() / 60 + n.getUTCSeconds() / 3600;
-  const d = (n - Date.UTC(n.getUTCFullYear(), 0, 0)) / 864e5;
-  const dec = -23.44 * Math.cos(2 * Math.PI * (d + 10) / 365) * Math.PI / 180, lon = -(h - 12) * 15 * Math.PI / 180;
+  /* NOAA low-precision solar position (about 0.01 deg): true declination and equation of time, from the real clock */
+  const R = Math.PI / 180, n = Date.now() / 864e5 + 2440587.5 - 2451545.0;
+  const L = (280.460 + 0.9856474 * n) % 360, g = ((357.528 + 0.9856003 * n) % 360) * R;
+  const lam = (L + 1.915 * Math.sin(g) + 0.020 * Math.sin(2 * g)) * R, eps = (23.439 - 4e-7 * n) * R;
+  const dec = Math.asin(Math.sin(eps) * Math.sin(lam)), ra = Math.atan2(Math.cos(eps) * Math.sin(lam), Math.cos(lam));
+  const gmst = ((280.46061837 + 360.98564736629 * n) % 360) * R;
+  const lon = ra - gmst; /* sub-solar longitude, east positive */
   return new THREE.Vector3(Math.cos(dec) * Math.cos(lon), Math.sin(dec), -Math.cos(dec) * Math.sin(lon));
 }
 
@@ -678,7 +682,8 @@ async function loadAtmos() {
     for (let f = 0; f < NF; f++) { const t = Math.min(f * 6, h.time.length - 1), F = fr[f], b = q * NV;
       for (let l = 0; l < 3; l++) { const sp = h[V[2 * l]][t] || 0, dr = (h[V[2 * l + 1]][t] || 0) * Math.PI / 180; F[b + 2 * l] = -sp * Math.sin(dr); F[b + 2 * l + 1] = -sp * Math.cos(dr); }
       F[b + 6] = h[V[6]][t] || 0; F[b + 7] = h[V[7]][t] || 0; } });
-  ATM.fr = fr; ATM.t0 = Date.now(); ATM.s0 = simH; lastAH = -1; cu.real.value = 1; atmFrame();
+  const th0 = Date.parse(d[0].hourly.time[0] + "Z"), now0 = Date.now(), ok0 = isFinite(th0) && now0 - th0 >= 0 && now0 - th0 < 3 * 36e5; /* Open-Meteo hour 0 = the current hour in GMT: the clock must start at that hour, not at the minute of loading */
+  ATM.fr = fr; ATM.t0 = ok0 ? th0 : now0; ATM.s0 = simH - (now0 - ATM.t0) / 36e5; lastAH = -1; cu.real.value = 1; atmFrame();
   log("Live atmosphere loaded (Open-Meteo: 850/700/200 hPa wind, humidity, cloud; hourly forecast for the next 72 h). The simulation clock starts at the real UTC time now.", "ok");
 }
 async function loadSST() {
@@ -704,8 +709,8 @@ async function loadEvents() {
     m.position.copy(toVec(last.coordinates[1], last.coordinates[0], 1.018)); evGroup.add(m);
     if (storm) realStorms.push({obs: pts.map(g => ({t: Date.parse(g.date), lat: g.coordinates[1], lon: g.coordinates[0], V: g.magnitudeValue && /kt|knot/i.test(g.magnitudeUnit || "kts") ? g.magnitudeValue * 0.514 : 0})), mesh: m, name: e.title, lat: last.coordinates[1], lon: last.coordinates[0], prev: pts.length > 1 ? pts[pts.length - 2].coordinates : null, days: pts.length > 1 ? (Date.parse(last.date) - Date.parse(pts[pts.length - 2].date)) / 864e5 : 1, v: last.magnitudeValue && /kt|knot/i.test(last.magnitudeUnit || "kts") ? last.magnitudeValue * 0.514 : 0}), storms.push(e.title + " (" + last.coordinates[1].toFixed(1) + ", " + last.coordinates[0].toFixed(1) + ", " + last.date.slice(0, 10) + ")"); else fires++;
   }
-  try { await loadNHC(); } catch (er) { log("NOAA NHC official tracks unavailable: " + er.message + " (storms use the observed NASA EONET track).", "warn"); } try { await loadGlobalTC(); } catch (er) { log("Global storm feed (NHC + JTWC) unavailable: " + er.message, "warn"); } finishTracks(); nStorms = Math.max(storms.length, realStorms.length); rebuildCyclones(true); loadLocalWind().catch(er => log("Real wind fields unavailable: " + er.message, "warn")); if (window.ecoVolcanoes) window.ecoVolcanoes(vcs);
-  log("NASA EONET: " + storms.length + " active storm(s) and " + fires + " wildfire(s) and " + vcs.length + " volcano(es) marked on the globe (the storm itself is the spinning vortex carried by real wind, placed at its real position; cyan line = official forecast track, orange dots = fires, red cones with glowing plume = volcanoes).", "warn");
+  try { await loadNHC(); } catch (er) { log("NOAA NHC official tracks unavailable: " + er.message + " (storms use the observed NASA EONET track).", "warn"); } try { await loadGlobalTC(); } catch (er) { log("Global storm feed (NHC + JTWC) unavailable: " + er.message, "warn"); } finishTracks(); const nStale = pruneStale(); nStorms = realStorms.length; rebuildCyclones(true); loadLocalWind().catch(er => log("Real wind fields unavailable: " + er.message, "warn")); if (window.ecoVolcanoes) window.ecoVolcanoes(vcs);
+  log("NASA EONET: " + realStorms.length + " active storm(s)" + (nStale ? " (" + nStale + " outdated hidden)" : "") + " and " + fires + " wildfire(s) and " + vcs.length + " volcano(es) marked on the globe (the storm itself is the spinning vortex carried by real wind, placed at its real position; cyan line = official forecast track, orange dots = fires, red cones with glowing plume = volcanoes).", "warn");
   vcs.slice(0, 5).forEach(v => log("Volcano: " + v.name, "warn"));
   storms.slice(0, 6).forEach(s => log("Storm: " + s, "warn"));
 }
@@ -749,7 +754,7 @@ async function loadNHC() { /* official forecast positions (Atlantic, East and Ce
     let s = realStorms.find(x => x.name && (x.name.toUpperCase().includes(name) || near(x, tr[0].lat, tr[0].lon)));
     if (!s) { const m = new THREE.Mesh(new THREE.SphereGeometry(0.016, 12, 12), new THREE.MeshBasicMaterial({color: 0xff3355})); m.position.copy(toVec(tr[0].lat, tr[0].lon, 1.018)); evGroup.add(m);
       s = {mesh: m, name: pts[0].name + " (NHC)", lat: tr[0].lat, lon: tr[0].lon, prev: null, days: 1, v: tr[0].V, obs: []}; realStorms.push(s); }
-    tr.final = true; s.nhc = true; s.track = tr; s.cur = {lat: tr[0].lat, lon: tr[0].lon, V: tr[0].V}; s.tkSrc = "NOAA NHC official forecast";
+    tr.final = true; s.nhc = true; s.track = tr; s.cur = {lat: tr[0].lat, lon: tr[0].lon, V: tr[0].V, t: tr[0].t}; s.tkSrc = "NOAA NHC official forecast";
     evGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(tr.map(p => toVec(p.lat, p.lon, 1.017))), new THREE.LineBasicMaterial({color: 0x7fe8ff})));
     tr.forEach(p => { const d = new THREE.Mesh(new THREE.SphereGeometry(0.005, 8, 8), new THREE.MeshBasicMaterial({color: 0x7fe8ff})); d.position.copy(toVec(p.lat, p.lon, 1.017)); evGroup.add(d); });
     log("Storm " + s.name + ": official NHC forecast track, " + tr.length + " positions out to +" + Math.round((tr[tr.length - 1].t - tr[0].t) / 36e5) + " h.", "ok");
@@ -762,7 +767,7 @@ function finishTracks() { /* storms without an official track (e.g. West Pacific
     if (s.track) return;
     const o = (s.obs || []).filter(p => isFinite(p.t)).sort((a, b) => a.t - b.t);
     if (!o.length) { s.cur = {lat: s.lat, lon: s.lon, V: s.v}; s.track = [{t: Date.now(), lat: s.lat, lon: s.lon, V: s.v}]; s.track.final = false; return; }
-    const tr = o.map(p => ({t: p.t, lat: p.lat, lon: p.lon, V: p.V})), b = o[o.length - 1], a = o[o.length - 2], dt = a ? (b.t - a.t) / 36e5 : 0; s.cur = {lat: b.lat, lon: b.lon, V: b.V};
+    const tr = o.map(p => ({t: p.t, lat: p.lat, lon: p.lon, V: p.V})), b = o[o.length - 1], a = o[o.length - 2], dt = a ? (b.t - a.t) / 36e5 : 0; s.cur = {lat: b.lat, lon: b.lon, V: b.V, t: b.t};
     if (a && dt >= 1) { const wl = x => ((x + 540) % 360) - 180, lim = x => Math.max(-0.5, Math.min(0.5, x)), vl = lim(wl(b.lon - a.lon) / dt), vb = lim((b.lat - a.lat) / dt);
       let la = b.lat, lo = b.lon; for (let k = 1; k <= 4; k++) { const f = Math.pow(0.92, k); la += vb * 6 * f; lo = wl(lo + vl * 6 * f); tr.push({t: b.t + 6 * k * 36e5, lat: la, lon: lo, V: b.V}); } ext++; }
     tr.final = false; s.track = tr; s.tkSrc = "NASA EONET observed track + extrapolated motion";
@@ -770,6 +775,22 @@ function finishTracks() { /* storms without an official track (e.g. West Pacific
   const now = simMs(); let hz = 0; realStorms.forEach(s => { if (s.track && s.track.final) hz = Math.max(hz, (s.track[s.track.length - 1].t - now) / 36e5); });
   LOOP_H = Math.max(72, Math.min(120, Math.ceil(hz / 6) * 6));
   if (realStorms.length) log("Real storms: " + realStorms.filter(s => s.track && s.track.final).length + " on official NHC tracks, " + ext + " on observed track + 24 h of real motion. The clock loops every " + LOOP_H + " h.", "info");
+}
+/* ---- stale-report filter: a storm whose last official report is older than STALE_H is no longer shown as live (EONET keeps old events "open") ---- */
+const STALE_H = 48, AGING_H = 30;
+function pruneStale() {
+  const now = Date.now(), dropped = [];
+  for (let i = realStorms.length - 1; i >= 0; i--) {
+    const s = realStorms[i], t = s.cur && s.cur.t, age = isFinite(t) ? (now - t) / 36e5 : NaN;
+    s.ageH = age;
+    if (isFinite(age) && age > STALE_H) {
+      dropped.push(s.name + " (last report " + Math.round(age) + " h ago)");
+      if (s.mesh) { evGroup.remove(s.mesh); if (s.mesh.geometry) s.mesh.geometry.dispose(); if (s.mesh.material) s.mesh.material.dispose(); }
+      realStorms.splice(i, 1);
+    }
+  }
+  if (dropped.length) log("Hidden as outdated (no report for more than " + STALE_H + " h): " + dropped.join("; ") + ".", "warn");
+  return dropped.length;
 }
 /* ---- ALL real storms worldwide: NHC + JTWC through the Esri "Active Hurricanes" live feed ---- */
 const ESRI_URL = "https://services9.arcgis.com/RHVPKKiFTONKtxq3/arcgis/rest/services/Active_Hurricanes_v1/FeatureServer";
@@ -797,7 +818,7 @@ async function loadGlobalTC() {
     if (!tr.length) return;
     let s = realStorms.find(x => x.name && (x.name.toUpperCase().includes(key) || near(x, tr[0].lat, tr[0].lon)));
     if (!s) { s = {name: g.name + " (JTWC/NHC)", lat: tr[0].lat, lon: tr[0].lon, prev: null, days: 1, v: tr[0].V, obs: []}; realStorms.push(s); }
-    tr.final = tr.length > 1; s.track = tr; s.cur = {lat: (last || tr[0]).lat, lon: (last || tr[0]).lon, V: (last ? last.kt * 0.514 : tr[0].V)}; s.tkSrc = "NHC / JTWC official forecast (Esri live feed)"; n++;
+    tr.final = tr.length > 1; s.track = tr; s.cur = {lat: (last || tr[0]).lat, lon: (last || tr[0]).lon, V: (last ? last.kt * 0.514 : tr[0].V), t: last ? last.dtg : tr[0].t}; s.tkSrc = "NHC / JTWC official forecast (Esri live feed)"; n++;
     if (tr.length > 1) { evGroup.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(tr.map(p => toVec(p.lat, p.lon, 1.017))), new THREE.LineBasicMaterial({color: 0x7fe8ff})));
       tr.forEach(p => { const d = new THREE.Mesh(new THREE.SphereGeometry(0.005, 8, 8), new THREE.MeshBasicMaterial({color: 0x7fe8ff})); d.position.copy(toVec(p.lat, p.lon, 1.017)); evGroup.add(d); }); }
   });
@@ -840,9 +861,21 @@ function lwAt(s, la, lo) { /* real local wind (m/s) at a point near a real storm
   const x0 = Math.min(LWN - 2, Math.floor(x)), y0 = Math.min(LWN - 2, Math.floor(y)), fx = x - x0, fy = y - y0, k = y0 * LWN + x0, b = a => (a[k] * (1 - fx) + a[k + 1] * fx) * (1 - fy) + (a[k + LWN] * (1 - fx) + a[k + LWN + 1] * fx) * fy;
   _lw[0] = b(g.u); _lw[1] = b(g.v); return _lw;
 }
+function stormCheck() { /* verification: for every real storm, the real numbers side by side. All times UTC */
+  const T = t => isFinite(t) ? new Date(t).toISOString().slice(0, 16).replace("T", " ") + " UTC" : "report time n/a", list = realStorms.filter(s => s.cur), now = Date.now();
+  if (!list.length) { log("Storm check: no active real storm right now.", "info"); return; }
+  log("Storm check (now " + T(now) + "): " + list.length + " real storm(s). Position and wind are the last official report, not an estimate for this minute.", "info");
+  list.forEach(s => { const c = s.cur, sea = sstAt(c.lat, c.lon), land = landAt(c.lat, c.lon), live = ATM.fr.length > 0;
+    const shr = live ? Math.hypot(fld(c.lat, c.lon, 4) - fld(c.lat, c.lon, 0), fld(c.lat, c.lon, 5) - fld(c.lat, c.lon, 1)) : null, wd = live ? envWind({lat: c.lat, lon: c.lon, V: c.V}) : null;
+    const vp = sea != null && !land ? Math.min(85, Math.max(0, 18 * (sea - 26))) * (1 - sm(25, 42, Math.abs(c.lat))) * (shr == null ? 1 : 1 - sm(10, 25, shr)) : null;
+    log(s.name + " | reported " + T(c.t) + (isFinite(c.t) ? " (" + ((now - c.t) / 36e5).toFixed(1) + " h ago" + ((now - c.t) / 36e5 > AGING_H ? ", AGING: may have weakened" : "") + ")" : "") + " | " + c.lat.toFixed(1) + ", " + c.lon.toFixed(1) + " | wind " + (c.V > 0 ? Math.round(c.V) + " m/s (" + catOf(c.V) + ")" : "n/a") +
+      " | water below: " + (land ? "land" : sea == null ? "no SST here" : sea.toFixed(1) + " C (10 deg grid), potential wind " + Math.round(vp) + " m/s") +
+      " | steering wind: " + (wd ? Math.round(Math.hypot(wd[0], wd[1])) + " m/s toward " + Math.round((Math.atan2(wd[0], wd[1]) * 180 / Math.PI + 360) % 360) + " deg" : "n/a") + " | shear: " + (shr == null ? "n/a" : Math.round(shr) + " m/s") + " | " + (s.tkSrc || "NASA EONET"), "info"); });
+}
 async function refreshAll() {
   await Promise.all([["wind and cloud field", loadAtmos], ["sea surface temperature", loadSST], ["NASA EONET events", loadEvents]]
     .map(async ([n, f]) => { try { await f(); } catch (e) { log("Live " + n + " unavailable: " + e.message, "err"); } }));
+  if (!window.__scDone) { window.__scDone = 1; try { stormCheck(); } catch (e) { log("Storm check failed: " + e.message, "err"); } }
 }
 setInterval(refreshAll, 600000); /* real storm positions re-read every 10 min */
 
@@ -921,7 +954,7 @@ async function askAI(q) { return builtin(q); } /* built-in analyst: runs locally
 $("run").onclick = runAnalysis;
 
 /* ---------- Commands ---------- */
-const HELP = ["help                 commands", "goto <place>         lock a location (e.g. goto Cairo)", "layer <true|lst|ndvi|sst|sim|simtemp|cyc>", "live                 refresh wind, SST and NASA storm data", "run                  full trend analysis", "year <current year to 2100>", "scenario <119|126|245|370|585>", "ask <question>       ask the AI engine", "clear"];
+const HELP = ["help                 commands", "goto <place>         lock a location (e.g. goto Cairo)", "layer <true|lst|ndvi|sst|sim|simtemp|cyc>", "live                 refresh wind, SST and NASA storm data", "run                  full trend analysis", "year <current year to 2100>", "scenario <119|126|245|370|585>", "ask <question>       ask the AI engine", "storms               check real storms: report time (UTC), water below, wind", "clear"];
 async function exec(line) {
   const [c, ...a] = line.trim().split(/\s+/), arg = a.join(" ");
   log("> " + line, "cmd");
@@ -933,6 +966,7 @@ async function exec(line) {
   else if (c === "scenario") { const k = "ssp" + arg; if (!SC[k]) return log("Use 126, 245 or 585", "err"); S.sc = k; update(); }
   else if (c === "ask") { if (!arg) return log("Usage: ask <question>", "err"); try { log(await askAI(arg), "ai"); } catch (e) { log("AI error: " + e.message, "err"); } }
   else if (c === "live") await refreshAll();
+  else if (c === "storms") { try { stormCheck(); } catch (e) { log("Storm check failed: " + e.message, "err"); } }
   else if (c === "clear") logEl.textContent = "";
   else if (c) log("Unknown command. Type help.", "err");
 }
@@ -948,33 +982,33 @@ camera.near = 0.02; camera.updateProjectionMatrix();
 const DV = `uniform vec4 box;varying vec2 vUv,vG;varying vec3 vWN,vP;
 void main(){vUv=uv;float lo=mix(box.x,box.y,uv.x),lt=mix(box.z,box.w,uv.y);vG=vec2((lo+180.)/360.,(lt+90.)/180.);
 vWN=normalize(mat3(modelMatrix)*normal);vec4 w=modelMatrix*vec4(position,1.);vP=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}`;
-const DF = `uniform sampler2D map,t1,t2,lights;uniform vec3 sun;uniform float loss,veg,temp,ovl,sl,tc,show;
+const DF = `uniform sampler2D map,t1,t2,lights;uniform vec3 sun;uniform float loss,veg,temp,ovl,sl,tc,show,raw;
 varying vec2 vUv,vG;varying vec3 vWN,vP;
 void main(){
  vec4 A=texture2D(t1,vUv),B=texture2D(t2,vUv);
  float v1=A.a*mix(1.,smoothstep(.04,.1,max(A.r,max(A.g,A.b))),tc),v2=B.a*mix(1.,smoothstep(.04,.1,max(B.r,max(B.g,B.b))),tc);
  float k=max(v1,v2);
  vec3 c=mix(B.rgb,A.rgb,v1);
- c=pow(mix(vec3(dot(c,vec3(.3,.59,.11))),c,1.2),vec3(1.12));
+ c=mix(pow(mix(vec3(dot(c,vec3(.3,.59,.11))),c,1.2),vec3(1.12)),c,raw);
  float lat=abs(vG.y-.5)*3.14159,north=step(.5,vG.y);
  vec3 mc=texture2D(map,vG).rgb;float land=smoothstep(-.02,.06,mc.r-mc.b*.8);
  float capLat=1.05+.4*loss,capNow=1.13;
  float lowLat=1.-smoothstep(.3,.9,lat),midLat=smoothstep(.6,1.,lat)*(1.-smoothstep(1.1,1.3,lat));
  float mL=north*smoothstep(capNow,capNow+.04,lat)*(1.-smoothstep(capLat-.02,capLat+.02,lat))*smoothstep(.55,.75,min(c.r,min(c.g,c.b)));
- c=mix(c,vec3(.03,.12,.3),mL);
- c=mix(c,vec3(.1,.55,.15),max(veg,0.)*midLat*.5*land);
- c=mix(c,vec3(.62,.45,.2),max(-veg,0.)*lowLat*.7*land);
- c=mix(c,c*vec3(1.25,.85,.6)+vec3(.06,0.,0.),ovl*.8);
+ c=mix(c,vec3(.03,.12,.3),mL*(1.-raw));
+ c=mix(c,vec3(.1,.55,.15),max(veg,0.)*midLat*.5*land*(1.-raw));
+ c=mix(c,vec3(.62,.45,.2),max(-veg,0.)*lowLat*.7*land*(1.-raw));
+ c=mix(c,c*vec3(1.25,.85,.6)+vec3(.06,0.,0.),ovl*.8*(1.-raw));
  
  float r=max(sl-.1,0.)*16.;float w=0.;
   for(int i=0;i<16;i++){float a=float(i)*.392699,rr=r*(i<8?1.:.5);vec2 px=vec2(1./2048.,1./1024.)*rr;vec3 q=texture2D(map,vG+vec2(cos(a)*px.x,sin(a)*px.y)).rgb;w=max(w,1.-smoothstep(-.02,.06,q.r-q.b*.8));}
-  c=mix(c,vec3(.05,.3,.6),w*land*step(.01,r)*.9);
+  c=mix(c,vec3(.05,.3,.6),w*land*step(.01,r)*.9*(1.-raw));
   vec3 N=normalize(vWN);float d=dot(N,sun),day=smoothstep(-.12,.25,d);
  float lit=mix(.03+day*(.3+.8*max(d,0.)),.95,.6);
  vec3 col=c*lit+texture2D(lights,vG).rgb*(1.-day)*.65;
  float e=smoothstep(0.,.05,vUv.x)*smoothstep(0.,.05,1.-vUv.x)*smoothstep(0.,.05,vUv.y)*smoothstep(0.,.05,1.-vUv.y);
- gl_FragColor=vec4(col,k*show*e);}`;
-const du = Object.assign({}, uni, {t1: {value: solid(0, 0, 0, 0)}, t2: {value: solid(0, 0, 0, 0)}, box: {value: new THREE.Vector4(-1, 1, -1, 1)}, show: {value: 0}});
+ gl_FragColor=vec4(col,k*show*e*mix(1.,mix(1.,.72,1.-tc),raw));}`;
+const du = Object.assign({}, uni, {t1: {value: solid(0, 0, 0, 0)}, t2: {value: solid(0, 0, 0, 0)}, box: {value: new THREE.Vector4(-1, 1, -1, 1)}, show: {value: 0}, raw: {value: 1}});
 const patch = new THREE.Mesh(new THREE.SphereGeometry(1.0008, 8, 8), new THREE.ShaderMaterial({uniforms: du, vertexShader: DV, fragmentShader: DF,
   transparent: true, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2}));
 patch.visible = false; patch.renderOrder = 2; earth.add(patch);
@@ -985,6 +1019,7 @@ const wmsBox = (l, d, b, n) => "https://gibs.earthdata.nasa.gov/wms/epsg4326/bes
   "&SRS=EPSG:4326&BBOX=" + b.join(",") + "&WIDTH=" + n + "&HEIGHT=" + n + "&FORMAT=" + l.fmt + "&TRANSPARENT=" + (l.fmt.endsWith("png") ? "TRUE" : "FALSE") + "&TIME=" + d;
 const loadTex = u => new Promise((ok, no) => loader.load(u, ok, undefined, no));
 async function detailTick() {
+  uni.raw.value = du.raw.value = S.year <= new Date().getFullYear() ? 1 : 0; /* observed years: show NASA pixels as delivered, no model paint on top */
   if (S.detReset) { det.key = ""; det.lat = 999; S.detReset = 0; }
   if (det.busy) return;
   const z = camera.position.z;
@@ -1223,7 +1258,7 @@ let windOn = true, oceanOn = true, cycOn = true, paused = false, lastYC = null, 
 
 (function flowLoop() {
   const t = performance.now(), dt = Math.min(0.1, (t - lastT) / 1000); lastT = t;
-  du.show.value += (dShow - du.show.value) * 0.12;
+  du.show.value += ((S.layer === "true" ? dShow : dShow * (1 - SAT.k)) - du.show.value) * 0.12;
   patch.visible = du.show.value > 0.01 && det.key !== "";
   windF.m.visible = windOn; oceanF.m.visible = oceanOn; cycGroup.visible = cycOn;
   if (S.year !== lastYC || S.sc !== lastSC) { lastYC = S.year; lastSC = S.sc; rebuildCyclones(); const m = model(S.sc, S.year), e = $("yearChip");
@@ -1971,13 +2006,25 @@ loadHistory().catch(e => log("Storm history unavailable: " + e.message + " (gene
   const tx = lon => (lon + 180) / 360, ty = lat => { const s = Math.sin(lat * D2R); return 0.5 - Math.log((1 + s) / (1 - s)) / (4 * Math.PI); };
   const lonOf = u => u * 360 - 180, latOf = v => Math.atan(Math.sinh(Math.PI * (1 - 2 * v))) / D2R;
   const vec = (lat, lon) => { const a = lat * D2R, o = lon * D2R, c = Math.cos(a); return [c * Math.cos(o), Math.sin(a), -c * Math.sin(o)]; };
-  const U = {sp: {value: 0}, ex: {value: 3}, hs: {value: 1}, fl: {value: 0}};
+  const U = {sp: {value: 0}, ex: {value: 3}, hs: {value: 1}, fl: {value: 0}, ova: {value: 0}, pj: {value: 0}, om: 0.5};
   SAT.ex = 3; SAT.tilt = 0; SAT.h = 2.6;
   const VSH = "varying vec2 vUv;varying vec3 vWN;void main(){vUv=uv;vWN=normalize(mat3(modelMatrix)*normal);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}";
-  const FSH = "uniform sampler2D map,dem;uniform vec3 sun;uniform vec4 dr;uniform float op,sp,sd,fl,hs,ex,mpt,hd;varying vec2 vUv;varying vec3 vWN;" +
+  const FSH = "uniform sampler2D map,dem,lv,lv2,t1,t2,gm,cyc;uniform vec3 sun,tr;uniform vec4 dr,box;uniform float op,sp,sd,fl,hs,ex,mpt,hd,ova,la,tc,pj,loss,veg,temp,ov,cy;varying vec2 vUv;varying vec3 vWN;" +
+    "vec3 ramp(float t){vec3 a=vec3(.05,.25,1.),b=vec3(.1,.95,1.),k=vec3(1.,.9,.2),d=vec3(1.,.15,.1);if(t<.33)return mix(a,b,t/.33);if(t<.66)return mix(b,k,(t-.33)/.33);return mix(k,d,(t-.66)/.34);}" +
+    "vec2 ll(){float n=tr.z,y=(tr.y+1.-vUv.y)/n,e=exp(3.14159265*(1.-2.*y));return vec2((tr.x+vUv.x)/n*360.-180.,degrees(atan((e-1./e)*.5)));}" +
     "float de(vec2 q){vec4 c=floor(texture2D(dem,clamp(q,.002,.998))*255.+.5);return c.r*256.+c.g+c.b/256.-32768.;}" +
     "float eb(vec2 p){vec2 q=(dr.xy+p*dr.z)*256.-.5,f=fract(q),b=(floor(q)+.5)/256.;float a=de(b),c=de(b+vec2(1./256.,0.)),d=de(b+vec2(0.,1./256.)),e=de(b+vec2(1./256.));return mix(mix(a,c,f.x),mix(d,e,f.x),f.y);}" +
     "void main(){if(sd>0.&&gl_FragCoord.x>sp)discard;if(sd<0.&&gl_FragCoord.x<=sp)discard;vec3 c=texture2D(map,vUv).rgb;" +
+    "if(ova>.001){vec2 g=ll(),gu=vec2((g.x+180.)/360.,(g.y+90.)/180.);vec4 G1=texture2D(lv,gu),G2=texture2D(lv2,gu);" +
+    "float g1=G1.a*mix(1.,smoothstep(.04,.1,max(G1.r,max(G1.g,G1.b))),tc),g2=G2.a*mix(1.,smoothstep(.04,.1,max(G2.r,max(G2.g,G2.b))),tc),kg=la*max(g1,g2);vec3 cg=mix(G2.rgb,G1.rgb,g1);" +
+    "vec2 bu=vec2((g.x-box.x)/(box.y-box.x),(g.y-box.z)/(box.w-box.z));float ins=step(0.,bu.x)*step(bu.x,1.)*step(0.,bu.y)*step(bu.y,1.);vec4 A=texture2D(t1,bu),B=texture2D(t2,bu);" +
+    "float a1=A.a*mix(1.,smoothstep(.04,.1,max(A.r,max(A.g,A.b))),tc),a2=B.a*mix(1.,smoothstep(.04,.1,max(B.r,max(B.g,B.b))),tc),kr=max(a1,a2)*ins;vec3 cr=mix(B.rgb,A.rgb,a1);" +
+    "vec3 W=vec3(.3,.59,.11),lc=mix(cg,cr,kr);float pl=dot(c,W);vec3 tn=mix(lc,lc*clamp(pl/max(dot(lc,W),.08),.35,2.4),.8);c=mix(c,tn,max(kg,kr)*ova);}" +
+    "if(pj>.001){vec3 c0=c;vec2 g=ll(),gu=vec2((g.x+180.)/360.,(g.y+90.)/180.);vec3 m=texture2D(gm,gu).rgb;" +
+    "float lat=abs(gu.y-.5)*3.14159,north=step(.5,gu.y),land=smoothstep(-.02,.06,m.r-m.b*.8),capLat=1.05+.4*loss,melt=north*smoothstep(1.,1.15,lat)*(1.-smoothstep(capLat-.04,capLat+.04,lat)),lowLat=1.-smoothstep(.3,.9,lat),midLat=smoothstep(.6,1.,lat)*(1.-smoothstep(1.1,1.3,lat));" +
+    "c=mix(c,vec3(.03,.12,.3),melt*step(.6,min(c.r,min(c.g,c.b))));c=mix(c,vec3(.1,.55,.15),max(veg,0.)*midLat*.35*land);c=mix(c,vec3(.62,.45,.2),max(-veg,0.)*lowLat*.55*land);" +
+    "c=mix(c,ramp(clamp(temp*(1.+1.4*smoothstep(.5,1.4,lat))/9.,0.,1.)),ov*.75);float ld=(gu.y-.5)*180.,zz=texture2D(cyc,vec2(gu.x+.5/36.,(ld+40.)/80.)).r*step(abs(ld),38.)*smoothstep(3.,8.,abs(ld))*cy;" +
+    "c=mix(c,vec3(1.,.3,.08),smoothstep(.45,.62,zz)*.6*(1.-land));vec3 W2=vec3(.3,.59,.11);c=mix(c,c*clamp(dot(c0,W2)/max(dot(c,W2),.08),.4,2.2),.75);c=mix(c0,c,pj);}" +
     "if(hd>.5){float t=1./(256.*dr.z),e0=eb(vUv),a=eb(vUv+vec2(t,0.)),b=eb(vUv-vec2(t,0.)),u=eb(vUv+vec2(0.,t)),d=eb(vUv-vec2(0.,t));" +
     "vec3 n=normalize(vec3(-(a-b)/(2.*mpt)*ex,-(u-d)/(2.*mpt)*ex,1.)),L=normalize(vec3(-.55,.6,.58));c*=mix(1.,clamp(dot(n,L)/L.z,.3,1.7),hs);" +
     "if(fl>.01){float w=step(0.,e0)*smoothstep(fl+.25,fl-.25,e0);c=mix(c,vec3(.04,.38,.85),w*.72);c+=vec3(0.,.25,.4)*smoothstep(.5,0.,abs(e0-fl))*step(0.,e0);}}" +
@@ -2030,7 +2077,7 @@ loadHistory().catch(e => log("Storm history unavailable: " + e.message + " (gene
       t.base = pos.slice();
       const g = new THREE.BufferGeometry(); g.setAttribute("position", new THREE.BufferAttribute(pos, 3)); g.setAttribute("normal", new THREE.BufferAttribute(nor, 3)); g.setAttribute("uv", new THREE.BufferAttribute(uv, 2)); g.setIndex(idx);
       const tex = new THREE.Texture(img); tex.anisotropy = 4; tex.wrapS = tex.wrapT = THREE.ClampToEdgeWrapping; tex.needsUpdate = true;
-      const mat = new THREE.ShaderMaterial({uniforms: {map: {value: tex}, dem: {value: dummy}, sun: uni.sun, op: {value: 0}, dr: {value: new THREE.Vector4(0, 0, 1, 0)}, mpt: {value: 10}, hd: {value: 0}, sp: U.sp, sd: L.sd, fl: U.fl, hs: U.hs, ex: U.ex},
+      const mat = new THREE.ShaderMaterial({uniforms: {map: {value: tex}, dem: {value: dummy}, lv: uni.live, lv2: uni.live2, t1: du.t1, t2: du.t2, box: du.box, la: uni.la, tc: uni.tc, tr: {value: new THREE.Vector3(t.X, t.Y, n)}, ova: o.drape ? U.ova : {value: 0}, pj: o.drape ? U.pj : {value: 0}, gm: uni.map, cyc: uni.cyc, loss: uni.loss, veg: uni.veg, temp: uni.temp, ov: uni.ov, cy: uni.cy, sun: uni.sun, op: {value: 0}, dr: {value: new THREE.Vector4(0, 0, 1, 0)}, mpt: {value: 10}, hd: {value: 0}, sp: U.sp, sd: L.sd, fl: U.fl, hs: U.hs, ex: U.ex},
         vertexShader: VSH, fragmentShader: FSH, transparent: true, depthWrite: false, side: THREE.DoubleSide, polygonOffset: true, polygonOffsetFactor: -4, polygonOffsetUnits: -4});
       const m = new THREE.Mesh(g, mat); m.position.set(C[0], C[1], C[2]);
       m.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(new THREE.Vector3(...E), new THREE.Vector3(...N), new THREE.Vector3(...C)));
@@ -2083,7 +2130,7 @@ loadHistory().catch(e => log("Storm history unavailable: " + e.message + " (gene
     };
     return L;
   }
-  const base = Layer({url: ESRI, maxZ: 18, order: -40, dem: true, phase: 1}), tmL = Layer({url: MODIS, maxZ: 9, order: -70, sd: 1, phase: 5});
+  const base = Layer({url: ESRI, maxZ: 18, order: -40, dem: true, drape: true, phase: 1}), tmL = Layer({url: MODIS, maxZ: 9, order: -70, sd: 1, phase: 5});
   let modelKey = "", rise = 0, frame = 0, lastT = performance.now();
   (function tick(now) {
     requestAnimationFrame(tick); const dt = Math.min(0.1, (now - lastT) / 1000); lastT = now; frame++;
@@ -2091,6 +2138,8 @@ loadHistory().catch(e => log("Storm history unavailable: " + e.message + " (gene
     tmL.target = TM.on ? r(1.95, 0.2) : 0; tmL.sd.value = TM.cmp ? 1 : 0; base.sd.value = TM.on && TM.cmp ? -1 : 0;
     base.target = SAT.on && !(TM.on && !TM.cmp && tmL.k > 0.9) ? r(1.42, 0.17) : 0;
     SAT.k = Math.max(base.k, tmL.k); U.sp.value = TM.split * el.width;
+    U.ova.value += (((S.layer !== "true" && LIVE[S.layer]) ? U.om * (0.3 + 0.7 * Math.max(0, Math.min(1, (SAT.h - 0.0008) / 0.01))) : 0) - U.ova.value) * 0.15; /* chosen NASA layer is painted ON the photo + relief, not beside it */
+    U.pj.value += (((S.layer !== "true" && !LIVE[S.layer]) ? Math.min(1, U.om / 0.6) * (0.3 + 0.7 * Math.max(0, Math.min(1, (SAT.h - 0.0008) / 0.01))) : 0) - U.pj.value) * 0.15; /* same for the projection layers (ice, heat, cyclone zone) */
     const key = S.sc + S.year; if (key !== modelKey) { modelKey = key; rise = Math.max(0, model(S.sc, S.year).sl - model(S.sc, Y0).sl); }
     U.fl.value = FL.on ? rise + FL.extra : 0; U.hs.value = Math.min(1.5, SAT.ex / 3); U.ex.value = SAT.ex;
     base.tick(dt, frame); tmL.tick(dt, frame);
@@ -2110,6 +2159,7 @@ loadHistory().catch(e => log("Storm history unavailable: " + e.message + " (gene
   card.appendChild(rng(2000, Y0, TM.year, 1, v => { TM.year = v; tmL.clear(); setTm(); })); card.appendChild(tmLab); setTm();
   card.appendChild(btn("Flood what-if: OFF", b => { FL.on = !FL.on; b.textContent = "Flood what-if: " + (FL.on ? "ON" : "OFF"); fl.textContent = ""; if (FL.on) { SAT.on = true; if (SAT.h > 0.05) zT = Math.min(zT, 1.02); } }));
   const fl = lab(""); card.appendChild(rng(0, 10, 0, 0.5, v => { FL.extra = v; })); card.appendChild(fl);
+  card.appendChild(lab("Layer opacity")); card.appendChild(rng(0, 1, 0.5, 0.05, v => { U.om = v; }));
   card.appendChild(lab("Relief x")); card.appendChild(rng(1, 8, 3, 0.5, v => { SAT.ex = v; SAT.exDirty = true; }));
   card.appendChild(lab("Tilt")); card.appendChild(rng(0, 65, 0, 1, v => { SAT.tilt = v * D2R; }));
   const sp = document.createElement("div"); sp.style.cssText = "position:absolute;top:0;bottom:0;width:22px;margin-left:-11px;z-index:5;cursor:ew-resize;touch-action:none;display:none;background:linear-gradient(90deg,transparent 10px,#fff 10px,#fff 12px,transparent 12px)";
